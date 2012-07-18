@@ -21,6 +21,9 @@ loop(Socket, DbConn) ->
     inet:setopts(Socket, [{active, once}]),
         receive
             {udp, Socket, Host, Port, Bin} ->
-                io:format("Server received:~p~n",[Bin]),
+%%%                 io:format("Server received:~p~n",[Bin]),
+                {ok, LastErr} = do(fun() ->  
+                    mongo:insert(timers, [Bin] )
+                end),       
                 loop(Socket)
 end.
