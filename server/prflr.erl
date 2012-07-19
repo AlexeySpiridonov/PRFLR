@@ -23,7 +23,12 @@ loop(Socket, DbConn) ->
             {udp, Socket, Host, Port, Bin} ->
 %%%                 io:format("Server received:~p~n",[Bin]),
                 {ok, LastErr} = do(fun() ->  
-                    mongo:insert(timers, [Bin] )
+                    mongo:insert(DbConn, "timers", makemessage(Bin) )
                 end),       
                 loop(Socket)
 end.
+
+
+makemessage(Bin) ->
+    [Group, Timer, Duration, Info, Thread] = tokens(Bin, "|"),
+    [{"group",Group}, {"timer",Timer}, {"duration",Duration}, {"info",Info}, {"thread",Thread}].
