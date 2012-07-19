@@ -1,15 +1,34 @@
 <?
 
+/*
+ *  HOW TO USE 
+ * 
+ * // configure profiler
+ * // set  profiler server:port  and  set Group for timers 
+ * PRFLR::init('localhost','4000','testApp');
+ * 
+ * 
+ * //start timer
+ * PRFLR::Begin('mongoDB.save');
+ * 
+ * //some code
+ * sleep(1000);
+ * 
+ * //stop timer
+ * PRFLR::End('mongoDB.save');
+ * 
+ */
+
 class PRFLR {
 
     private static $sender;
 
-    public static function init($server, $port, $group, $delayedSend) {
+    public static function init($server, $port, $group) {
         self::$sender = new PRFLRSender();
         self::$sender->server = $server;
         self::$sender->port = $port;
-        self::$sender->delayedSend = $delayedSend;
-        self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        if (!self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))
+                throw new Exception('Can\'t open socket.');
         if (!$group)
             self::$sender->group = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
         else
@@ -60,23 +79,21 @@ class PRFLRSender {
 
         $delay = microtime() - $this->timers[$timer];
 
-        //if (!$this->delayedSend) {
         $this->send($timer, $delay, $info);
-        
+
         unset($this->timers[$timer]);
-        //}
     }
 
     private function send($timer, $duration, $info = '') {
-        
-        $message = join( array($this->thread, $this->group, $timer, $duration, $info), '|');
-        
+
+        // format the message
+        $message = join(array($this->thread, $this->group, $timer, $duration, $info), '|');
+
         if ($this->socket) {
-            socket_sendto($socket, $message, strlen($message), 0, $this->server, $this->port);
+            socket_sendto($this->socket, $message, strlen($message), 0, $this->server, $this->port);
         } else {
             throw new Exception("Socket not exist\n");
         }
-       
     }
 
 }
