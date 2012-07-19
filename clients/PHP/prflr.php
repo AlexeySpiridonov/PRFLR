@@ -2,48 +2,81 @@
 
 class PRFLR {
 
-    private $timers;
-    private $delayedSend = false;
-    public static $group;
-    public static $thread;
+    private static $sender;
 
-    public function __construct($group = false) {
-
+    public static function init($server, $port, $group, $delayedSend) {
+        self::$sender = new PRFLRSender();
+        self::$sender->server = $server;
+        self::$sender->port = $port;
+        self::$sender->delayedSend = $delayedSend;
+        self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         if (!$group)
-            $this->group = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
+            self::$sender->group = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
         else
-            $this->group = $group;
+            self::$sender->group = $group;
+        self::$sender->thread = uniqid();
     }
 
-    public static function Start($timer) {
+    public static function begin($timer) {
+        self::$sender->Begin($timer);
+    }
+
+    public static function end($timer, $info = '') {
+        self::$sender->End($timer, $info);
+    }
+
+    public function __destruct() {
+        unset(self::$sender);
+    }
+
+}
+
+class PRFLRSender {
+
+    private $timers;
+    private $socket;
+    public $delayedSend = false;
+    public $group;
+    public $thread;
+    public $server;
+    public $port;
+
+    public function __construct() {
+        
+    }
+
+    public function __destruct() {
+        socket_close($this->socket);
+    }
+
+    public function Begin($timer) {
         $this->timers[$timer] = microtime();
     }
 
-    public static function Stop($timer, $info = '') {
+    public function End($timer, $info = '') {
 
         if (!isset($this->timers[$timer]))
             return false;
 
         $delay = microtime() - $this->timers[$timer];
 
-
-
-        if (!$this->delayedSend) {
-            $this->send();
-        }
+        //if (!$this->delayedSend) {
+        $this->send($timer, $delay, $info);
+        
+        unset($this->timers[$timer]);
+        //}
     }
 
-    private static function send() {
-
-        $data = array($this->group, $timer, $duration, $info, $this->thred);
-        $message = join($data, '|');
-        if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+    private function send($timer, $duration, $info = '') {
+        
+        $message = join( array($this->thread, $this->group, $timer, $duration, $info), '|');
+        
+        if ($this->socket) {
             socket_sendto($socket, $message, strlen($message), 0, $this->server, $this->port);
         } else {
-            throw  ("can't create socket\n");
+            throw new Exception("Socket not exist\n");
         }
-        unset($this->timers[$timer]);
+       
     }
 
 }
-
