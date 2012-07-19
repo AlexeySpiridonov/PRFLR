@@ -8,177 +8,304 @@ and open the template in the editor.
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
+    <style>
+        table {font-size:14px;}
+        table.m td {margin-top:4px;padding-right:16px;}
+        
+        tr.f td {font-size:30px;}
+        table tr td.ff {font-size:15px;}
+        table tr td.dd {font-size:18px;}
+        .timer {font-size:18px;}
+        .group {font-size:15px;}
+        .info {font-size:12px;}
+        .thread {font-size:10px;}
+        .b0 {border:none!important;padding-right:0px!important;}
+        .b1 td {border-bottom:1px solid #808080;}
+        table.b td {margin-top:0px;border:0px solid #808080;font-size:10px;}
+    </style>
     <body>
         <div>
 
-            <h4>Group / Timer / Info </h4>
+            <h1>[RPFLR] -> Raw Timers | Statistic | SlowTop | Groups | TimeGraph | Settings</h1>
             <br>
-            <input style="width:300px; font-size:14px;" value="/ 192.168.1.1 / mongo.add / User Add">
-            <table border="1"> 
-                <tr>
+            <h1>Raw Timers</h1>
+            
+<table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                <tr class="f bo">
+                    <td class='b0'></td>
+                    <td>Group / Timer / Info / Thread</td>
+                    <td></td>
+                    <td>Statistic</td>
+                    <td class="ff" align="right">Total<br>
+                        Count</td>
+                </tr>
+                <tr class="b0">
+                    <td class='b0'>#></td>
+                    <td><input style="width:95%; height:35px; font-size:14px;" value="192.168.1.1 / mongo.add / User Add / 1234567890">
+                    [?]
+                    </td>
+                    <td></td>
+                    <td colspan="2" align="left">
+                        Sort By: 
+                        <select style="width:200px;">
+                            <option value="by Max time">Max Time (red)</option>
+                            <option value="by Max time">Avg Time (green)</option>
+                            <option value="by Max time">Min Time (blue)</option>
+                            
+                            <option value="by Max time">Total Time</option>
+                            <option value="by Max time">Count</option>
+                            <option value="by Max time">Dispersion</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
+                <tr class="b1">
+                    <td class='b0'></td>
+                    <td class="dd"><span class="group">WER123DFGsdf987q</span> / <span class='timer'>DFG.DFR.sdf.234.DFG.DFR.sdf.234.DFG.DFR.sdf.2343</span> / <span class="info">DREF3456dfgy0963</span> / <span class="thread">1w23dM45hW67q890</span></td>
+                    <td>342ms</td>
+                    <td>
+                        <table class='b' cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div style="background-color: #0000ff;width:12px;height:8px"/></td>
+                                <td>12ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #00ff00;width:32px;height:8px"/></td>
+                                <td>32ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #ff0000;width:262px;height:8px"/></td>
+                                <td>262ms</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td align="right">
+                        123435ms<br>
+                        315
+
+                    </td>
+
+                </tr>
+<tr class="b1">
+                    <td class='b0'></td>
+                    <td class="dd"><span class="group">WER12rrt555</span> / <span class='timer'>DFG.DFR.sdf.234.2343</span> / <span class="info">DREF3456dfgy0963</span> / <span class="thread">1w23dM45hW67q890</span></td>
+                    <td>342ms</td>
+                    <td>
+                        <table class='b' cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div style="background-color: #0000ff;width:12px;height:8px"/></td>
+                                <td>12ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #00ff00;width:32px;height:8px"/></td>
+                                <td>32ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #ff0000;width:262px;height:8px"/></td>
+                                <td>262ms</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td align="right">
+                        123435ms<br>
+                        315
+
+                    </td>
+
+                </tr>                
+            </table>
+            
+
+                        <h1>Statistic</h1>
+            
+<table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                <tr class="f bo">
+                    <td class='b0'></td>
+                    <td>Group / Timer / Info / Thread</td>
+                    <td></td>
+                    <td>Statistic</td>
+                    <td class="ff" align="right">Total<br>
+                        Count</td>
+                </tr>
+                <tr class="b0">
+                    <td class='b0'>#></td>
+                    <td><input style="width:95%; height:35px; font-size:14px;" value="WER*/*.DFR.*/*">
+                    [?]
+                    </td>
+                    <td></td>
+                    <td colspan="2" align="left">
+                        Sort By: 
+                        <select style="width:200px;">
+                            <option value="by Max time">Max Time (red)</option>
+                            <option value="by Max time">Avg Time (green)</option>
+                            <option value="by Max time">Min Time (blue)</option>
+                            
+                            <option value="by Max time">Total Time</option>
+                            <option value="by Max time">Count</option>
+                            <option value="by Max time">Dispersion</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
+                <tr class="b1">
+                    <td class='b0'></td>
+                    <td class="dd"><span class="group">WER123DFGsdf987q</span> / <span class='timer'>DFG.DFR.sdf.234.DFG.DFR.sdf.234.DFG.DFR.sdf.2343</span></td>
+                    <td></td>
+                    <td>
+                        <table class='b' cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div style="background-color: #0000ff;width:12px;height:8px"/></td>
+                                <td>12ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #00ff00;width:32px;height:8px"/></td>
+                                <td>32ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #ff0000;width:262px;height:8px"/></td>
+                                <td>262ms</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td align="right">
+                        123435ms<br>
+                        315
+
+                    </td>
+
+                </tr>
+                <tr class="b1">
+                    <td class='b0'></td>
+                    <td class="dd"><span class="group">WER12rrt555</span> / <span class='timer'>DFG.DFR.sdf.234.2343</span></td>
+                    <td></td>
+                    <td>
+                        <table class='b' cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div style="background-color: #0000ff;width:12px;height:8px"/></td>
+                                <td>12ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #00ff00;width:32px;height:8px"/></td>
+                                <td>32ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #ff0000;width:262px;height:8px"/></td>
+                                <td>262ms</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td align="right">
+                        123435ms<br>
+                        315
+
+                    </td>
+
+                </tr>                
+            </table>
+
+            
+            
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            
+            
+            
+            
+            
+            <h1>Last Timers 2</h1>
+            <table class="m" border="0" cellpadding="0" cellspacing="0"> 
+                <tr class="f">
                     <td>Group</td>
-                    <td>Name</td>
+                    <td>Timer</td>
                     <td>Info</td>
                     <td>Thread</td>
                     <td>T.Current</td>
-                    <td>T.Min</td>
-                    <td>T.Max</td>
-                    <td>T.Avg</td>
-                    <td>T.Total</td>
-                    <td>Count</td>
+                    <td>Statistic</td>
+                    <td class="ff" align="right">T.Total<br>
+                        Count</td>
                 </tr>
                 <tr>
                     <td><input name="1" value="192.168.*.1"/></td>
                     <td><input name="1" value="mongo.add"/></td>
                     <td><input name="1" value="User Add"/></td>
                     <td><input name="1" value="ghtrtyrrtty5yy4457yy"/></td>
-                    <td>sort ^</td>
-                    <td></td><td></td><td></td><td></td><td></td>
+                    <td colspan="3" align="right">
+                        Sort By: 
+                        <select style="width:200px;">
+                            <option value="by Max time">Max Time</option>
+                            <option value="by Max time">Min Time</option>
+                            <option value="by Max time">Avg Time</option>
+                            <option value="by Max time">Total Time</option>
+                            <option value="by Max time">Count</option>
+
+
+                        </select>
+                    </td>
+
                 </tr>
-                <tr>
+                <tr class="b1">
                     <td>192.168.1.1</td>
                     <td>mongo.add</td>
                     <td>user Add</td>
                     <td>1234567890</td>
-                    <td>12</td><td>12</td><td>12</td><td>12</td><td>12</td><td>12</td>
+                    <td>342ms</td>
+                    <td>
+                        <table class='b' cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div style="background-color: #0000ff;width:12px;height:8px"/></td>
+                                <td>12ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #00ff00;width:32px;height:8px"/></td>
+                                <td>32ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #ff0000;width:262px;height:8px"/></td>
+                                <td>262ms</td>
+                            </tr>
+                        </table>
 
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
+                    </td>
+                    <td align="right">
+                        123435ms<br>
+                        315
 
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
+                    </td>
 
-                </tr><tr>
+                </tr>
+                <tr class="b1">
                     <td>192.168.1.1</td>
                     <td>mongo.add</td>
                     <td>user Add</td>
                     <td>1234567890</td>
+                    <td>342ms</td>
+                    <td>
+                        <table class='b' cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div style="background-color: #0000ff;width:12px;height:8px"/></td>
+                                <td>12ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #00ff00;width:32px;height:8px"/></td>
+                                <td>32ms</td>
+                            </tr>
+                            <tr>
+                                <td><div style="background-color: #ff0000;width:262px;height:8px"/></td>
+                                <td>262ms</td>
+                            </tr>
+                        </table>
 
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
+                    </td>
+                    <td align="right">
+                        123435ms<br>
+                        315
 
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
-
-                </tr><tr>
-                    <td>192.168.1.1</td>
-                    <td>mongo.add</td>
-                    <td>user Add</td>
-                    <td>1234567890</td>
+                    </td>
 
                 </tr>
             </table>

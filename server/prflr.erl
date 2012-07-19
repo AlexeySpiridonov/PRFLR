@@ -30,5 +30,5 @@ end.
 
 
 makemessage(Bin) ->
-    [Group, Timer, Duration, Info, Thread] = tokens(Bin, "|"),
-    [{"group",Group}, {"timer",Timer}, {"duration",Duration}, {"info",Info}, {"thread",Thread}].
+    [Thread, Group, Timer, Duration, Info] = tokens(Bin, "|"),
+    [{"thread",Thread}, {"group",Group}, {"timer",Timer}, {"duration",Duration}, {"info",Info}].
