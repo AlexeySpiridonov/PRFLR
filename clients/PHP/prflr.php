@@ -5,7 +5,7 @@
  * 
  * // configure profiler
  * // set  profiler server:port  and  set Group for timers 
- * PRFLR::init('localhost','4000','testApp');
+ * PRFLR::init('localhost','4000','192.168.1.45-testApp');
  * 
  * 
  * //start timer
@@ -23,12 +23,12 @@ class PRFLR {
 
     private static $sender;
 
-    public static function init($server, $port, $group) {
+    public static function init($ip, $port, $group) {
         self::$sender = new PRFLRSender();
-        self::$sender->server = $server;
+        self::$sender->ip = gethostbyname($ip);
         self::$sender->port = $port;
         if (!self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))
-                throw new Exception('Can\'t open socket.');
+            throw new Exception('Can\'t open socket.');
         if (!$group)
             self::$sender->group = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
         else
@@ -53,11 +53,11 @@ class PRFLR {
 class PRFLRSender {
 
     private $timers;
-    private $socket;
+    public $socket;
     public $delayedSend = false;
     public $group;
     public $thread;
-    public $server;
+    public $ip;
     public $port;
 
     public function __construct() {
@@ -69,7 +69,7 @@ class PRFLRSender {
     }
 
     public function Begin($timer) {
-        $this->timers[$timer] = microtime();
+        $this->timers[$timer] = microtime(true);
     }
 
     public function End($timer, $info = '') {
@@ -77,7 +77,7 @@ class PRFLRSender {
         if (!isset($this->timers[$timer]))
             return false;
 
-        $delay = microtime() - $this->timers[$timer];
+        $delay = round(( microtime(true) - $this->timers[$timer] ) * 1000, 3);
 
         $this->send($timer, $delay, $info);
 
@@ -90,7 +90,7 @@ class PRFLRSender {
         $message = join(array($this->thread, $this->group, $timer, $duration, $info), '|');
 
         if ($this->socket) {
-            socket_sendto($this->socket, $message, strlen($message), 0, $this->server, $this->port);
+            socket_sendto($this->socket, $message, strlen($message), 0, $this->ip, $this->port);
         } else {
             throw new Exception("Socket not exist\n");
         }
