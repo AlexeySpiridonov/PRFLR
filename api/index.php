@@ -7,7 +7,7 @@ class dispatcher {
     private $data;
 
     public function __construct() {
-        $this->mongo = new Mongo("mongodb://prflr:prflr@localhost");
+        $this->mongo = new Mongo("mongodb://prflr:prflr@188.127.227.36");
         $this->data = $this->mongo->prflr->timers;
     }
 
@@ -36,13 +36,13 @@ class dispatcher {
         $criteria = array();
 
         if (isset($par[0]) && $par[0] != '*')
-            $criteria['group'] = new MongoRegex("/^" . $par[0] . "/i");
+            $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
         if (isset($par[1]) && $par[1] != '*')
-            $criteria['timer'] = new MongoRegex("/^" . $par[1] . "/i");
+            $criteria['timer'] = new MongoRegex("/" . $par[1] . "/i");
         if (isset($par[2]) && $par[2] != '*')
-            $criteria['info'] = new MongoRegex("/^" . $par[2] . "/i");
+            $criteria['info'] = new MongoRegex("/" . $par[2] . "/i");
         if (isset($par[3]) && $par[3] != '*')
-            $criteria['thread'] = new MongoRegex("/^" . $par[3] . "/i");
+            $criteria['thread'] = $par[3];
 
         return $criteria;
     }
@@ -53,7 +53,7 @@ class dispatcher {
         $initial = array("time" => array("min" => 0, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {
 prev.count++;
-prev.time.total += prev.duration;
+prev.time.total += obj.duration;
 if (prev.time.min > obj.duration) prev.time.min = obj.duration;
 if (prev.time.max < obj.duration) prev.time.max = obj.duration;
 
@@ -68,9 +68,11 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
 
         $gr = $this->prepareGroupBy();
 
-        $data = $collection->group($gr[0], $gr[1], $gr[2], $criteria)->sort(array('time.max' => -1));
-
-        return $data;
+        $data = $this->data->find(array())->limit(50); //group($gr[0], $gr[1], $gr[2], $criteria)->sort(array('time.max' => -1));
+        foreach ($data as $k => $item) {
+            $dat[$k] = $item;
+        }
+        return $dat;
 
         return array(
             array(
@@ -109,10 +111,15 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         $criteria = $this->prepareCriteria();
 
         $gr = $this->prepareGroupBy();
+        //print_r($gr);
+        $data = $this->data->group($gr[0], $gr[1], $gr[2], $criteria); //->sort(array('time.max' => -1));
 
-        $data = $collection->group($gr[0], $gr[1], $gr[2], $criteria)->sort(array('time.max' => -1));
+        foreach ($data as $k => $item) {
+            $dat[$k] = $item;
+            //$dat[$k]['dispersion'] = ($item['time']['max'] - $item['time']['min']) / ($item['time']['total'] / $item['count']);  
+        }
+        return $dat;
 
-        return $data;
 
         return array(
             array(
@@ -216,7 +223,8 @@ $d->request = $_GET;
 
 $r = str_replace('/', '_', $_GET['r']);
 
-echo json_encode($d->$r);
-
+eval('$r = $d->' . $r . '();');
+//print_r($r);
+echo json_encode($r);
 unset($d);
 
