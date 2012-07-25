@@ -2,11 +2,11 @@
 
 class dispatcher {
 
-    public $request;
     private $mongo;
     private $data;
 
     public function __construct() {
+        //TODO  move to config
         $this->mongo = new Mongo("mongodb://prflr:prflr@188.127.227.36");
         $this->data = $this->mongo->prflr->timers;
     }
@@ -15,8 +15,16 @@ class dispatcher {
         $this->mongo->close();
     }
 
+    private function out($data) {
+        $dat = array();
+        foreach ($data as $k => $item) {
+            $dat[$k] = $item;
+        }
+        return $dat;
+    }
+    
+    //TODO  delete on production
     public function init() {
-
         for ($i = 0; $i < 3000; $i++) {
             $this->data->insert(array(
                 'group' => 'group.' . rand(1, 2),
@@ -26,15 +34,12 @@ class dispatcher {
                 'duration' => rand(2, 999),
             ));
         }
-        return array('add' => true);
+        return array('add' => $i);
     }
 
     private function prepareCriteria() {
-
         $par = split('/', $_GET["filter"]);
-
         $criteria = array();
-
         if (isset($par[0]) && $par[0] != '*')
             $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
         if (isset($par[1]) && $par[1] != '*')
@@ -48,7 +53,6 @@ class dispatcher {
     }
 
     private function prepareGroupBy() {
-
         $keys = array("timer" => 1, "group" => 2);
         $initial = array("time" => array("min" => 0, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {
@@ -63,88 +67,19 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
     }
 
     public function stat_last() {
-
         $criteria = $this->prepareCriteria();
-
-        $gr = $this->prepareGroupBy();
-
-        $data = $this->data->find(array())->limit(50); //group($gr[0], $gr[1], $gr[2], $criteria)->sort(array('time.max' => -1));
-        foreach ($data as $k => $item) {
-            $dat[$k] = $item;
-        }
-        return $dat;
-
-        return array(
-            array(
-                'timer' => "first.timer.1",
-                'group' => "myluckyserver.ru",
-                'thread' => "fgr456dg5674hfgc",
-                'info' => 'good request',
-                'time' => array(
-                    'current' => 23,
-                    'min' => 12,
-                    'max' => 1234,
-                    'average' => 45,
-                    'total' => 123345,
-                ),
-                'count' => 456,
-            ),
-            array(
-                'timer' => "first.timer.2",
-                'group' => "mybadserver.ru",
-                'thread' => "fgr456dg5674hfgc",
-                'info' => 'bad request',
-                'time' => array(
-                    'current' => 13,
-                    'min' => 122,
-                    'max' => 714,
-                    'average' => 45,
-                    'total' => 123345,
-                ),
-                'count' => 456,
-            ),
-        );
+        $data = $this->data->find($criteria)->limit(50);
+        return $this->out($data);
     }
 
     public function stat_aggregate() {
-
         $criteria = $this->prepareCriteria();
-
         $gr = $this->prepareGroupBy();
-        //print_r($gr);
-        $data = $this->data->group($gr[0], $gr[1], $gr[2], $criteria); //->sort(array('time.max' => -1));
-
-        foreach ($data as $k => $item) {
-            $dat[$k] = $item;
-            //$dat[$k]['dispersion'] = ($item['time']['max'] - $item['time']['min']) / ($item['time']['total'] / $item['count']);  
-        }
-        return $dat;
-
-
-        return array(
-            array(
-                'timer' => "first.timer.1",
-                'group' => "myluckyserver.ru",
-                'time' => array(
-                    'min' => 12,
-                    'max' => 1234,
-                    'average' => 45,
-                    'total' => 123345,
-                ),
-                'count' => 456,
-            ),
-            array(
-                'timer' => "first.timer.2",
-                'group' => "mybadserver.ru",
-                'time' => array(
-                    'min' => 122,
-                    'max' => 714,
-                    'average' => 45,
-                    'total' => 123345,
-                ),
-                'count' => 456,
-            ),
-        );
+        $data = $this->data->group($gr[0], $gr[1], $gr[2], $criteria);
+        
+        //TODO  add sort by  parameter   min/max/avenger/total/count/dispersion
+        
+        return $this->out($data);
     }
 
     public function stat_graph() {
@@ -218,13 +153,8 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
 }
 
 $d = new dispatcher();
-
-$d->request = $_GET;
-
 $r = str_replace('/', '_', $_GET['r']);
-
 eval('$r = $d->' . $r . '();');
-//print_r($r);
 echo json_encode($r);
 unset($d);
 
