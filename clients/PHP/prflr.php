@@ -12,7 +12,7 @@
  * PRFLR::Begin('mongoDB.save');
  * 
  * //some code
- * sleep(1000);
+ * sleep(1);
  * 
  * //stop timer
  * PRFLR::End('mongoDB.save');

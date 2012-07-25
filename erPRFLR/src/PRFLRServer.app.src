@@ -1,0 +1,12 @@
+{application, PRFLRServer,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { PRFLRServer_app, []}},
+  {env, []}
+ ]}.
