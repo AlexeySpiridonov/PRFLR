@@ -1,0 +1,1 @@
+erl -sname prflr -pa ebin -pa deps/bson/ebin -pa deps/mongodb/ebin  -s prflr_app
