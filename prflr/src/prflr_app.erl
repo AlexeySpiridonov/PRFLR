@@ -15,8 +15,9 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    prflr_sup:start_link(),
-    spawn(fun() -> server(4000, "188.127.227.36") end).
+    
+    spawn(fun() -> server(4000, "188.127.227.36") end),
+    prflr_sup:start_link().
 
 server(Port, MongoHost) ->
     {ok, Socket} = gen_udp:open(Port, [binary, {active, false}]),
@@ -33,7 +34,7 @@ loop(Socket, DbConn) ->
     inet:setopts(Socket, [{active, once}]),
         receive
             {udp, Socket, Host, Port, Bin} ->
-%%%                 io:format("Server received:~p~n",[Bin]),
+%%%             io:format("Server received:~p~n",[Bin]),
                 %{ok, LastErr} = do(fun() ->  
                     mongo:insert(DbConn, "timers", makemessage(Bin) ),
                 %end),       

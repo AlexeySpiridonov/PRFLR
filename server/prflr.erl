@@ -25,12 +25,16 @@ loop(Socket, DbConn) ->
             {udp, Socket, Host, Port, Bin} ->
                  io:format("Server received:~p~n",[Bin]),
                 %{ok, LastErr} = do(fun() ->  
+makemessage(Bin),
                     %mongo:insert(DbConn, "timers", makemessage(Bin) ),
                 %end),       
                 loop(Socket, DbConn)
 end.
 
+stop(_State) ->
+    ok.
+
 
 makemessage(Bin) ->
-    [Thread, Group, Timer, Duration, Info] = tokens(Bin, "|"),
+    [Thread, Group, Timer, Duration, Info] = tokens([Bin], "|"),
     [{"thread",Thread}, {"group",Group}, {"timer",Timer}, {"duration",Duration}, {"info",Info}].
