@@ -79,7 +79,7 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         
         //TODO  add sort by  parameter   min/max/avenger/total/count/dispersion
         
-        return $this->out($data);
+        return $this->out($data['retval']);
     }
 
     public function stat_graph() {
