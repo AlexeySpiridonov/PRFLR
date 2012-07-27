@@ -16,7 +16,7 @@ server(Port, MongoHost) ->
     io:format("Conn is : ~p~n", [Conn]),
     DbConn = {test, Conn},
 
-    loop(Socket, DbConn).
+    loop(Socket, Conn).
     %loop(Socket, MongoHost).
 
 loop(Socket, DbConn) ->
@@ -26,7 +26,14 @@ loop(Socket, DbConn) ->
                  io:format("Server received:~p~n",[Bin]),
                 %{ok, LastErr} = do(fun() ->  
 %makemessage(Bin),
-                    mongo:insert(DbConn, "timers", [{"thread",'tread'}, {"group","Group"}, {"timer","Timer"}, {"duration","Duration"}, {"info","Info"}] ),
+        mongo:do (safe, master, DbConn, prflr, fun () ->
+		Teams0 = [
+			{thread, <<"Yankees">>, timer, <<"American">>, group, <<"American">>, duration, <<"3">>}
+			],
+		mongo:insert_all (timers, Teams0)
+		
+	end),
+                   %mongo:insert(DbConn, "timers", [{"thread",'tread'}, {"group","Group"}, {"timer","Timer"}, {"duration","Duration"}, {"info","Info"}] ),
                 %end),       
                 loop(Socket, DbConn)
 end.
