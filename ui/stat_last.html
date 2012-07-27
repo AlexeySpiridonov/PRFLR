@@ -22,6 +22,8 @@
         </style>
         <script type="text/javascript">
             $(document).ready(function(){
+                $.ajaxSetup({cache: false}); // turn off ajax cache
+                
                 $('#tab_menu a').click(function(){
                     $('.profiler_block :input').unbind();
                     $('.profiler_block').hide();
@@ -300,6 +302,7 @@
         var elem = $(selector);
         var grid = elem.find('table.profiler_grid');
         $.getJSON('/prflr/ui/agg.json?'+elem.find(':input').serialize(), function(data){
+            grid.empty();
             $.each(data, function(i, item){
                 grid.append(''+
                     '<tr class="b1">'+
