@@ -19,28 +19,38 @@
             table.b td {margin-top:0px;border:0px solid #808080;font-size:10px;}
             
             .profiler_block {display: none;padding-bottom:50px}
+            .refresh_button {margin-right: 28px}
         </style>
         <script type="text/javascript">
+            var inProgress    = false;
+            var lineBarLength = 265;
+
             $(document).ready(function(){
                 $.ajaxSetup({cache: false}); // turn off ajax cache
-                
+
                 $('#tab_menu a').click(function(){
+                    if (inProgress) {
+                        return false;
+                    }
                     $('.profiler_block :input').unbind();
                     $('.profiler_block').hide();
                     var selector = $(this).attr('href');
                     $(selector).show();
-                    $(selector+' :input').change(function(){
-                        renderDataGrid(selector)
+                    $(selector+' :input').not('input[name="filter"]').change(function(e){
+                        renderDataGrid(selector);
                     });
-                    renderDataGrid(selector);
+                    $(selector+' .refresh_button').click(function(){
+                        renderDataGrid(selector);
+                    });
+                    renderDataGrid(selector, true);
                     return false;
                 });
-                
+
                 var anchor = window.location.hash;
                 if (anchor.length > 0) {
                     $('#tab_menu a[href="'+anchor+'"]').click();
                 } else {
-                    $('#tab_menu a[href="#raw"]').click();
+                    $('#tab_menu a[href="#agg"]').click();
                 }
             });
         </script>
@@ -76,7 +86,8 @@
                         </tr>
                         <tr class="b0">
                             <td class='b0'>#></td>
-                            <td><input name="filter" style="width:95%; height:35px; font-size:14px;" value="192.168.1.1 / mongo.add / User Add / 1234567890" />
+                            <td>
+                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="*/*/*/*" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_raw" /></td>
@@ -90,6 +101,13 @@
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
                                 </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div style="float:right">
+                                    <button class="refresh_button">Refresh</button>
+                                </div>
                             </td>
                         </tr>
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
@@ -120,9 +138,9 @@
                         </tr>
                         <tr class="b0">
                             <td class='b0'>#></td>
-                            <td><input name="filter" style="width:95%; height:35px; font-size:14px;" value="WER*/*.DFR.*/*" />
+                            <td>
+                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="*/pimer/*/*" />
                                 [?]
-
                             </td>
                             <td><input type="hidden" name="r" value="stat_aggregate" /></td>
                             <td colspan="2" align="left">
@@ -140,11 +158,16 @@
                         <tr>
                             <td></td>
                             <td>
-                                Group By: 
-                                <select style="width:200px;" name="groupby">
-                                    <option value="timer">Timer</option>
-                                    <option value="group,timer">Group + Timer</option>
-                                </select>
+                                <div style="float:left">
+                                    Group By: 
+                                    <select style="width:200px;" name="groupby">
+                                        <option value="timer">Timer</option>
+                                        <option value="group,timer">Group + Timer</option>
+                                    </select>
+                                </div>
+                                <div style="float:right">
+                                    <button class="refresh_button">Refresh</button>
+                                </div>
                             </td>
                             <td></td>
                             <td></td>
@@ -176,7 +199,8 @@
                         </tr>
                         <tr class="b0">
                             <td class='b0'>#></td>
-                            <td><input name="filter" style="width:95%; height:35px; font-size:14px;" value="" />
+                            <td>
+                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="group.1/pimer/*/*" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_slow" /></td>
@@ -190,6 +214,13 @@
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
                                 </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div style="float:right">
+                                    <button class="refresh_button">Refresh</button>
+                                </div>
                             </td>
                         </tr>
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
@@ -218,7 +249,8 @@
                         </tr>
                         <tr class="b0">
                             <td class='b0'>#></td>
-                            <td><input name="filter" style="width:95%; height:35px; font-size:14px;" value="" />
+                            <td>
+                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="group.1/pimer/*/*" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_groups" /></td>
@@ -232,6 +264,13 @@
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
                                 </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div style="float:right">
+                                    <button class="refresh_button">Refresh</button>
+                                </div>
                             </td>
                         </tr>
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
@@ -260,7 +299,8 @@
                         </tr>
                         <tr class="b0">
                             <td class='b0'>#></td>
-                            <td><input name="filter" style="width:95%; height:35px; font-size:14px;" value="" />
+                            <td>
+                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_graph" /></td>
@@ -297,34 +337,81 @@
 </html>
 
 <script type="text/javascript">
-    function renderDataGrid(selector)
+    function renderDataGrid(selector, checkEmpty)
     {
         var elem = $(selector);
         var grid = elem.find('table.profiler_grid');
-        $.getJSON('./api.php?'+elem.find(':input').serialize(), function(data){
+        var button = elem.find('.refresh_button');
+        var query  = elem.find(':input').serialize();
+
+        if (typeof(checkEmpty) == 'undefined') {
+            checkEmpty = false;
+        }
+        if (checkEmpty && grid.html().length > 0) {
+            return false;
+        }
+
+        inProgress = true; // set to true (C.O.)
+        elem.find(':input').attr('disabled', 'disabled');
+
+        grid.css('opacity', 0.3);
+        button.css('color', 'grey').html('Loading...');
+        $.getJSON('./api.php?'+query, function(data){
             grid.empty();
+
+            if (data == null) return false;
+
+            // first calculate line bars scale
+            // we should get the biggest max value and divide lineBarLength on this value
+            var maxMax = 0.1;
             $.each(data, function(i, item){
+                if (typeof(item.time) == 'undefined')     return false;
+                if (typeof(item.time.max) == 'undefined') return false;
+
+                if (item.time.max > maxMax) {
+                    maxMax = item.time.max;
+                }
+            });
+
+            var scale = lineBarLength / maxMax;
+            $.each(data, function(i, item){
+                if (typeof(item.time) == 'undefined') return false;
+
+                var dd = [];
+                if (typeof(item.group)  != 'undefined') {
+                    dd.push('<span class="group">'+item.group+'</span>')
+                }
+                if (typeof(item.timer)  != 'undefined') {
+                    dd.push('<span class="timer">'+item.timer+'</span>')
+                }
+                if (typeof(item.info)   != 'undefined') {
+                    dd.push('<span class="info">'+item.info+'</span>')
+                }
+                if (typeof(item.thread) != 'undefined') {
+                    dd.push('<span class="thread">'+item.thread+'</span>')
+                }
+                var min = item.time.min;
+                var avg = item.time.total / item.count;
+                var max = item.time.max;
                 grid.append(''+
                     '<tr class="b1">'+
                     '    <td class="dd">'+
-                    '       <span class="group">'+item.group+'</span> / <span class="timer">'+item.group+'</span>'+
-                    (typeof(item.info)   != 'undefined' ? ' / <span class="info">'+item.info+'</span>'     : '') +
-                    (typeof(item.thread) != 'undefined' ? ' / <span class="thread">'+item.thread+'</span>' : '') +
+                    dd.join(' / ')+
                     '    </td>'+
                     '    <td></td>'+
-                    '    <td width="320">'+
-                    '        <table class="b" cellpadding="0" cellspacing="0">'+
+                    '    <td width="'+(lineBarLength+55)+'">'+
+                    '        <table width="100%" class="b" cellpadding="0" cellspacing="0">'+
                     '            <tr>'+
-                    '                <td><div style="background-color: #0000ff;width:12px;height:8px"></div></td>'+
-                    '                <td>12ms</td>'+
+                    '                <td><div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:8px"></div></td>'+
+                    '                <td>'+min+'ms</td>'+
                     '            </tr>'+
-                    '            <tr>'+
-                    '                <td><div style="background-color: #00ff00;width:32px;height:8px"></div></td>'+
-                    '                <td>32ms</td>'+
+                    '            <tr>' +
+                    '                <td><div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:8px"></div></td>'+
+                    '                <td>'+Math.round(avg)+'ms</td>'+
                     '            </tr>'+
-                    '            <tr>'+
-                    '                <td><div style="background-color: #ff0000;width:262px;height:8px"></div></td>'+
-                    '                <td>262ms</td>'+
+                    '            <tr>' +
+                    '                <td width="'+lineBarLength+'"><div style="background-color: #ff0000;width:'+(max > 0 ? max*scale : 1)+'px;height:8px"></div></td>'+
+                    '                <td>'+max+'ms</td>'+
                     '            </tr>'+
                     '        </table>'+
                     '    </td>'+
@@ -335,6 +422,12 @@
                     '</tr>'+
                 '');
             });
+        }).complete(function(){
+            grid.css('opacity', 1);
+            button.css('color', 'black').html('Refresh');
+            elem.find(':input').attr('disabled', null);
+
+            inProgress = false;
         });
     }
 </script>

@@ -1,21 +1,24 @@
 <?php
 
-class dispatcher {
-
+class dispatcher
+{
     private $mongo;
     private $data;
 
-    public function __construct($connect) {
+    public function __construct($connect)
+    {
         //TODO  move to config
         $this->mongo = new Mongo($connect);
         $this->data = $this->mongo->prflr->timers;
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->mongo->close();
     }
 
-    private function out($data) {
+    private function out($data)
+    {
         $dat = array();
         foreach ($data as $k => $item) {
             $dat[$k] = $item;
@@ -24,7 +27,8 @@ class dispatcher {
     }
 
     //TODO  delete on production
-    public function init() {
+    public function init()
+    {
         for ($i = 0; $i < 3000; $i++) {
             $this->data->insert(array(
                 'group' => 'group.' . rand(1, 2),
@@ -37,28 +41,30 @@ class dispatcher {
         return array('add' => $i);
     }
 
-    private function prepareCriteria() {
+    private function prepareCriteria()
+    {
         if (isset($_GET["filter"])) {
-        $par = split('/', $_GET["filter"]);
-        $criteria = array();
-        if (isset($par[0]) && $par[0] != '*')
-            $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
-        if (isset($par[1]) && $par[1] != '*')
-            $criteria['timer'] = new MongoRegex("/" . $par[1] . "/i");
-        if (isset($par[2]) && $par[2] != '*')
-            $criteria['info'] = new MongoRegex("/" . $par[2] . "/i");
-        if (isset($par[3]) && $par[3] != '*')
-            $criteria['thread'] = $par[3];
+            $par = explode('/', $_GET["filter"]);
+            $criteria = array();
+            if (isset($par[0]) && $par[0] != '*')
+                $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
+            if (isset($par[1]) && $par[1] != '*')
+                $criteria['timer'] = new MongoRegex("/" . $par[1] . "/i");
+            if (isset($par[2]) && $par[2] != '*')
+                $criteria['info'] = new MongoRegex("/" . $par[2] . "/i");
+            if (isset($par[3]) && $par[3] != '*')
+                $criteria['thread'] = $par[3];
         }
         return $criteria;
     }
 
-    private function prepareGroupBy() {
-        if ( isset($_GET['groupby'])) {
-        $gb = split(',', $_GET['groupby']);
+    private function prepareGroupBy()
+    {
+        if (isset($_GET['groupby'])) {
+            $gb = explode(',', $_GET['groupby']);
 
-        foreach ($gb as $key => $val)
-            $keys[$val] = $key + 1;
+            foreach ($gb as $key => $val)
+                $keys[$val] = $key + 1;
         } else {
             $keys = array("timer" => 1, "group" => 2);
         }
@@ -74,13 +80,15 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         return array($keys, $initial, $reduce);
     }
 
-    public function stat_last() {
+    public function stat_last()
+    {
         $criteria = $this->prepareCriteria();
         $data = $this->data->find($criteria)->limit(50);
         return $this->out($data);
     }
 
-    public function stat_aggregate() {
+    public function stat_aggregate()
+    {
         $criteria = $this->prepareCriteria();
         $gr = $this->prepareGroupBy();
         $data = $this->data->group($gr[0], $gr[1], $gr[2], $criteria);
@@ -88,7 +96,8 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         if (isset($_GET["sortby"])) {
 
             //sort by  parameter   min/max/average/total/count/dispersion
-            function sorter($a, $b) {
+            function sorter($a, $b)
+            {
                 $sort = $_GET["sortby"];
                 if ($sort == 'count') {
                     $aa = $a[$sort];
@@ -115,7 +124,8 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         return $this->out($data['retval']);
     }
 
-    public function stat_graph() {
+    public function stat_graph()
+    {
         return array(
             array(
                 'timer' => 'my.first.timer',
@@ -136,15 +146,16 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         );
     }
 
-    public function stat_groups() {
-        
-    }
+    public function stat_groups()
+    {}
 
-    public function stat_slow() {
+    public function stat_slow()
+    {
         return $this->stat_aggregate();
     }
 
-    public function settings() {
+    public function settings()
+    {
         return array(
             'store' => 60 * 15,
             'block' => array(
@@ -163,6 +174,7 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
 }
 
 $d = new dispatcher("mongodb://prflr:prflr@188.127.227.36");
+//$d = new dispatcher("mongodb://prflr:prflr@127.0.0.1/prflr");
 $r = str_replace('/', '_', $_GET['r']);
 eval('$r = $d->' . $r . '();');
 echo json_encode($r);
