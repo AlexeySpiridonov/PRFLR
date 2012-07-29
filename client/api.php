@@ -84,17 +84,17 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
 
         $sort = $_GET["sortby"];
 
-        //TODO  add sort by  parameter   min/max/avg/total/count/dispersion
+        //sort by  parameter   min/max/average/total/count/dispersion
         function sorter($a, $b) {
             $sort = $_GET["sortby"];
             if ($sort == 'count') {
                 $aa = $a[$sort];
                 $bb = $b[$sort];
-            } elseif ($sort == "dispersion") {
+            } elseif ($sort == "average") {
                 $aa = $a['time']['total'] / $a['count'];
                 $bb = $b['time']['total'] / $b['count'];
             
-            } elseif ($sort == "avg") {
+            } elseif ($sort == "dispersion") {
                 $aa = ($a['time']['max'] - $a['time']['min']) / ($a['time']['total'] / $a['count']);
                 $bb = ($a['time']['max'] - $a['time']['min']) / ($b['time']['total'] / $b['count']);               
             } else {
@@ -104,10 +104,10 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
             if ($aa == $bb) {
                 return 0;
             }
-            return ($aa < $bb) ? -1 : 1;
+            return ($aa > $bb) ? -1 : 1;
         }
 
-        asort($data['retval'], 'sorter');
+        usort($data['retval'], 'sorter');
 
         return $this->out($data['retval']);
     }
