@@ -38,6 +38,7 @@ class dispatcher {
     }
 
     private function prepareCriteria() {
+        if (isset($_GET["filter"])) {
         $par = split('/', $_GET["filter"]);
         $criteria = array();
         if (isset($par[0]) && $par[0] != '*')
@@ -48,17 +49,19 @@ class dispatcher {
             $criteria['info'] = new MongoRegex("/" . $par[2] . "/i");
         if (isset($par[3]) && $par[3] != '*')
             $criteria['thread'] = $par[3];
-
+        }
         return $criteria;
     }
 
     private function prepareGroupBy() {
+        if ( isset($_GET['groupby'])) {
         $gb = split(',', $_GET['groupby']);
 
         foreach ($gb as $key => $val)
             $keys[$val] = $key + 1;
-        //$keys = array("timer" => 1, "group" => 2);
-
+        } else {
+            $keys = array("timer" => 1, "group" => 2);
+        }
         $initial = array("time" => array("min" => 0, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {
 prev.count++;
@@ -82,32 +85,32 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         $gr = $this->prepareGroupBy();
         $data = $this->data->group($gr[0], $gr[1], $gr[2], $criteria);
 
-        $sort = $_GET["sortby"];
+        if (isset($_GET["sortby"])) {
 
-        //sort by  parameter   min/max/average/total/count/dispersion
-        function sorter($a, $b) {
-            $sort = $_GET["sortby"];
-            if ($sort == 'count') {
-                $aa = $a[$sort];
-                $bb = $b[$sort];
-            } elseif ($sort == "average") {
-                $aa = $a['time']['total'] / $a['count'];
-                $bb = $b['time']['total'] / $b['count'];
-            
-            } elseif ($sort == "dispersion") {
-                $aa = ($a['time']['max'] - $a['time']['min']) / ($a['time']['total'] / $a['count']);
-                $bb = ($a['time']['max'] - $a['time']['min']) / ($b['time']['total'] / $b['count']);               
-            } else {
-                $aa = $a['time'][$sort];
-                $bb = $b['time'][$sort];
-            };
-            if ($aa == $bb) {
-                return 0;
+            //sort by  parameter   min/max/average/total/count/dispersion
+            function sorter($a, $b) {
+                $sort = $_GET["sortby"];
+                if ($sort == 'count') {
+                    $aa = $a[$sort];
+                    $bb = $b[$sort];
+                } elseif ($sort == "average") {
+                    $aa = $a['time']['total'] / $a['count'];
+                    $bb = $b['time']['total'] / $b['count'];
+                } elseif ($sort == "dispersion") {
+                    $aa = ($a['time']['max'] - $a['time']['min']) / ($a['time']['total'] / $a['count']);
+                    $bb = ($a['time']['max'] - $a['time']['min']) / ($b['time']['total'] / $b['count']);
+                } else {
+                    $aa = $a['time'][$sort];
+                    $bb = $b['time'][$sort];
+                };
+                if ($aa == $bb) {
+                    return 0;
+                }
+                return ($aa > $bb) ? -1 : 1;
             }
-            return ($aa > $bb) ? -1 : 1;
-        }
 
-        usort($data['retval'], 'sorter');
+            usort($data['retval'], 'sorter');
+        }
 
         return $this->out($data['retval']);
     }
