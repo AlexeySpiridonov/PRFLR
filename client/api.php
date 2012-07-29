@@ -5,9 +5,9 @@ class dispatcher {
     private $mongo;
     private $data;
 
-    public function __construct() {
+    public function __construct($connect) {
         //TODO  move to config
-        $this->mongo = new Mongo("mongodb://prflr:prflr@188.127.227.36");
+        $this->mongo = new Mongo($connect);
         $this->data = $this->mongo->prflr->timers;
     }
 
@@ -22,7 +22,7 @@ class dispatcher {
         }
         return $dat;
     }
-    
+
     //TODO  delete on production
     public function init() {
         for ($i = 0; $i < 3000; $i++) {
@@ -53,7 +53,12 @@ class dispatcher {
     }
 
     private function prepareGroupBy() {
-        $keys = array("timer" => 1, "group" => 2);
+        $gb = split(',', $_GET['groupby']);
+
+        foreach ($gb as $key => $val)
+            $keys[$val] = $key + 1;
+        //$keys = array("timer" => 1, "group" => 2);
+
         $initial = array("time" => array("min" => 0, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {
 prev.count++;
@@ -76,9 +81,34 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
         $criteria = $this->prepareCriteria();
         $gr = $this->prepareGroupBy();
         $data = $this->data->group($gr[0], $gr[1], $gr[2], $criteria);
-        
-        //TODO  add sort by  parameter   min/max/avenger/total/count/dispersion
-        
+
+        $sort = $_GET["sortby"];
+
+        //TODO  add sort by  parameter   min/max/avg/total/count/dispersion
+        function sorter($a, $b) {
+            $sort = $_GET["sortby"];
+            if ($sort == 'count') {
+                $aa = $a[$sort];
+                $bb = $b[$sort];
+            } elseif ($sort == "dispersion") {
+                $aa = $a['time']['total'] / $a['count'];
+                $bb = $b['time']['total'] / $b['count'];
+            
+            } elseif ($sort == "avg") {
+                $aa = ($a['time']['max'] - $a['time']['min']) / ($a['time']['total'] / $a['count']);
+                $bb = ($a['time']['max'] - $a['time']['min']) / ($b['time']['total'] / $b['count']);               
+            } else {
+                $aa = $a['time'][$sort];
+                $bb = $b['time'][$sort];
+            };
+            if ($aa == $bb) {
+                return 0;
+            }
+            return ($aa < $bb) ? -1 : 1;
+        }
+
+        asort($data['retval'], 'sorter');
+
         return $this->out($data['retval']);
     }
 
@@ -108,30 +138,7 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
     }
 
     public function stat_slow() {
-        return array(
-            array(
-                'timer' => "first.timer.1",
-                'group' => "myluckyserver.ru",
-                'time' => array(
-                    'min' => 12,
-                    'max' => 1234,
-                    'average' => 45,
-                    'total' => 123345,
-                ),
-                'count' => 456,
-            ),
-            array(
-                'timer' => "first.timer.2",
-                'group' => "mybadserver.ru",
-                'time' => array(
-                    'min' => 122,
-                    'max' => 714,
-                    'average' => 45,
-                    'total' => 123345,
-                ),
-                'count' => 456,
-            ),
-        );
+        return $this->stat_aggregate();
     }
 
     public function settings() {
@@ -152,7 +159,7 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
 
 }
 
-$d = new dispatcher();
+$d = new dispatcher("mongodb://prflr:prflr@188.127.227.36");
 $r = str_replace('/', '_', $_GET['r']);
 eval('$r = $d->' . $r . '();');
 echo json_encode($r);
