@@ -55,6 +55,7 @@
                     <h1 id="tab_menu">
                         <a href="#raw">Raw Timers</a> | <a href="#agg">Statistic</a> | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a> | <a href="#settings">Settings</a>
                     </h1>
+                    <img src="revert.gif" border=0/>
                 </td>
             </table>
             <div style="padding:15px;">
