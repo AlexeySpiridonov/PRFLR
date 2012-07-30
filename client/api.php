@@ -43,9 +43,9 @@ class dispatcher
 
     private function prepareCriteria()
     {
+        $criteria = array();
         if (isset($_GET["filter"])) {
             $par = explode('/', $_GET["filter"]);
-            $criteria = array();
             if (isset($par[0]) && $par[0] != '*')
                 $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
             if (isset($par[1]) && $par[1] != '*')
