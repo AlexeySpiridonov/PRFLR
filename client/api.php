@@ -21,7 +21,8 @@ class dispatcher
     {
         $dat = array();
         foreach ($data as $k => $item) {
-            $dat[$k] = $item;
+            unset($item['_id']);
+            $dat[] = $item;
         }
         return $dat;
     }
@@ -29,13 +30,14 @@ class dispatcher
     //TODO  delete on production
     public function init()
     {
-        for ($i = 0; $i < 3000; $i++) {
+        $this->data->remove();
+        for ($i = 0; $i < 100000; $i++) {
             $this->data->insert(array(
-                'group' => 'group.' . rand(1, 2),
-                'timer' => 'timer.' . rand(1, 9),
-                'info' => 'info' . rand(1, 3),
-                'thread' => 'somethread' . rand(1, 3),
-                'duration' => rand(2, 999),
+                'group' => 'group.' . rand(1, 9),
+                'timer' => 'timer.' . rand(10, 99),
+                'info' => 'info' . rand(1, 9),
+                'thread' => 'somethread' . rand(1000000, 300000000),
+                'time'=> array('current' => rand(8, 999)),
             ));
         }
         return array('add' => $i);
@@ -43,9 +45,9 @@ class dispatcher
 
     private function prepareCriteria()
     {
+        $criteria = array();
         if (isset($_GET["filter"])) {
             $par = explode('/', $_GET["filter"]);
-            $criteria = array();
             if (isset($par[0]) && $par[0] != '*')
                 $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
             if (isset($par[1]) && $par[1] != '*')
@@ -68,12 +70,12 @@ class dispatcher
         } else {
             $keys = array("timer" => 1, "group" => 2);
         }
-        $initial = array("time" => array("min" => 0, "max" => 0, "total" => 0), "count" => 0);
+        $initial = array("time" => array("min" => (int) 9999999, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {
 prev.count++;
-prev.time.total += obj.duration;
-if (prev.time.min > obj.duration) prev.time.min = obj.duration;
-if (prev.time.max < obj.duration) prev.time.max = obj.duration;
+prev.time.total += obj.time.current;
+if (prev.time.min > obj.time.current) prev.time.min = obj.time.current;
+if (prev.time.max < obj.time.current) prev.time.max = obj.time.current;
 
 }";
 
@@ -144,14 +146,6 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
                 ),
             ),
         );
-    }
-
-    public function stat_groups()
-    {}
-
-    public function stat_slow()
-    {
-        return $this->stat_aggregate();
     }
 
     public function settings()
