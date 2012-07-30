@@ -35,7 +35,7 @@ class dispatcher
                 'timer' => 'timer.' . rand(1, 9),
                 'info' => 'info' . rand(1, 3),
                 'thread' => 'somethread' . rand(1, 3),
-                'duration' => rand(2, 999),
+                'time'=> array('current' => rand(2, 999)),
             ));
         }
         return array('add' => $i);
@@ -68,12 +68,12 @@ class dispatcher
         } else {
             $keys = array("timer" => 1, "group" => 2);
         }
-        $initial = array("time" => array("min" => 0, "max" => 0, "total" => 0), "count" => 0);
+        $initial = array("time" => array("min" => (int) 9999999, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {
 prev.count++;
-prev.time.total += obj.duration;
-if (prev.time.min > obj.duration) prev.time.min = obj.duration;
-if (prev.time.max < obj.duration) prev.time.max = obj.duration;
+prev.time.total += obj.time.current;
+if (prev.time.min > obj.time.current) prev.time.min = obj.time.current;
+if (prev.time.max < obj.time.current) prev.time.max = obj.time.current;
 
 }";
 
@@ -144,14 +144,6 @@ if (prev.time.max < obj.duration) prev.time.max = obj.duration;
                 ),
             ),
         );
-    }
-
-    public function stat_groups()
-    {}
-
-    public function stat_slow()
-    {
-        return $this->stat_aggregate();
     }
 
     public function settings()
