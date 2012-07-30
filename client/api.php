@@ -29,13 +29,14 @@ class dispatcher
     //TODO  delete on production
     public function init()
     {
-        for ($i = 0; $i < 3000; $i++) {
+        $this->data->remove();
+        for ($i = 0; $i < 100000; $i++) {
             $this->data->insert(array(
-                'group' => 'group.' . rand(1, 2),
-                'timer' => 'timer.' . rand(1, 9),
-                'info' => 'info' . rand(1, 3),
-                'thread' => 'somethread' . rand(1, 3),
-                'time'=> array('current' => rand(2, 999)),
+                'group' => 'group.' . rand(1, 9),
+                'timer' => 'timer.' . rand(10, 99),
+                'info' => 'info' . rand(1, 9),
+                'thread' => 'somethread' . rand(1000000, 300000000),
+                'time'=> array('current' => rand(8, 999)),
             ));
         }
         return array('add' => $i);
