@@ -21,7 +21,8 @@ class dispatcher
     {
         $dat = array();
         foreach ($data as $k => $item) {
-            $dat[$k] = $item;
+            unset($item['_id']);
+            $dat[] = $item;
         }
         return $dat;
     }
