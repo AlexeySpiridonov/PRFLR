@@ -29,11 +29,12 @@ end.
 
 makemessage(Bin) ->
     [Thread, Group, Timer, Duration, Info] = tokens(binary_to_list(Bin), "|"),
+    {Fldr,[]} = to_float(Duration),
     {
                         thread, iolist_to_binary(Thread), 
                         timer,  iolist_to_binary(Timer), 
                         group,  iolist_to_binary(Group), 
-                        % duration, Duration,    Fucken erlang! How to convert string to float for mongoDB?
+                        duration, Fldr,
                         info,   iolist_to_binary(Info)
     }.
 
