@@ -9,7 +9,7 @@
             table.m td {margin-top:4px;padding-right:16px;}
             tr.f td {font-size:30px;}
             table tr td.ff {font-size:15px;}
-            table tr td.dd {font-size:18px;}
+            table tr td.dd {font-size:18px;padding-top:10px; padding-bottom: 10px}
             .timer {font-size:18px;}
             .group {font-size:15px;}
             .info {font-size:12px;}
@@ -19,7 +19,9 @@
             table.b td {margin-top:0px;border:0px solid #808080;font-size:10px;}
             
             .profiler_block {display: none;padding-bottom:50px}
-            .refresh_button {margin-right: 28px}
+            .refresh_button {margin-left: 10px;}
+            
+            #revert_gif {position: relative}
         </style>
         <script type="text/javascript">
             var inProgress    = false;
@@ -43,6 +45,12 @@
                         renderDataGrid(selector);
                     });
                     renderDataGrid(selector, true);
+                    // move revert gif
+                    var offset = 0;
+                    $(this).prevAll().each(function(i, item){
+                        offset += $(item).width() + 17;
+                    });
+                    $('#revert_gif').css('left', offset + $(this).width()/3.7);
                     return false;
                 });
 
@@ -50,7 +58,7 @@
                 if (anchor.length > 0) {
                     $('#tab_menu a[href="'+anchor+'"]').click();
                 } else {
-                    $('#tab_menu a[href="#agg"]').click();
+                    $('#tab_menu a[href="#last"]').click();
                 }
             });
         </script>
@@ -63,35 +71,34 @@
                 </td>
                 <td>
                     <h1 id="tab_menu">
-                        <a href="#raw">Raw Timers</a> | <a href="#agg">Statistic</a> | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a> | <a href="#settings">Settings</a>
+                        <a href="#last">Raw Timers</a> | <a href="#agg">Statistic</a><!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>--> | <a href="#settings">Settings</a>
                     </h1>
-                    <img src="revert.gif" border=0/>
+                    <img id="revert_gif" src="revert.gif" border=0 />
                 </td>
             </table>
             <div style="padding:15px;">
 
                 <!-- RAW TIMERS -->
-                <div id="raw" class="profiler_block">
-                    <h1>Raw Timers</h1>
+                <div id="last" class="profiler_block">
+                    <!--<h1>Raw Timers</h1>-->
                     
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr class="f bo">
                             <td class='b0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
-                            <td>Statistic</td>
+                            <td><!--Statistic--></td>
                             <td class="ff" align="right">
                                 Total<br />
                                 Count
                             </td>
                         </tr>
-                        <tr class="b0">
-                            <td class='b0'>#></td>
-                            <td>
-                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="*/*/*/*" />
-                                [?]
+                        <tr>
+                            <td class='b0'>#><input type="hidden" name="r" value="stat_last" /></td>
+                            <td colspan="10">
+                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
-                            <td><input type="hidden" name="r" value="stat_raw" /></td>
+                            <!--
                             <td colspan="2" align="left">
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
@@ -103,12 +110,12 @@
                                     <option value="dispersion">Dispersion</option>
                                 </select>
                             </td>
+                            -->
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                <div style="float:right">
-                                    <button class="refresh_button">Refresh</button>
-                                </div>
+                            <td class='b0'>&nbsp;</td>
+                            <td colspan="10" align="right" style="padding-right: 8px !important;">
+                                <button class="refresh_button">Refresh</button>
                             </td>
                         </tr>
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
@@ -119,31 +126,30 @@
                             </td>
                         </tr>
                     </table>
-                </div> <!-- END OF raw -->
+                </div> <!-- END OF last -->
 
                 <!-- STATISTIC -->
                 <div id="agg" class="profiler_block">
 
-                    <h1>Statistic</h1>
+                    <!--<h1>Statistic</h1>-->
 
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr class="f bo">
                             <td class='b0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
-                            <td>Statistic</td>
+                            <td><!--Statistic--></td>
                             <td class="ff" align="right">
                                 Total<br/>
                                 Count
                             </td>
                         </tr>
-                        <tr class="b0">
-                            <td class='b0'>#></td>
-                            <td>
-                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="*/pimer/*/*" />
-                                [?]
+                        <tr>
+                            <td class='b0'>#><input type="hidden" name="r" value="stat_aggregate" /></td>
+                            <td colspan="10">
+                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/timer.3/*/*" />
                             </td>
-                            <td><input type="hidden" name="r" value="stat_aggregate" /></td>
+                            <!--
                             <td colspan="2" align="left">
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
@@ -155,24 +161,23 @@
                                     <option value="dispersion">Dispersion</option>
                                 </select>
                             </td>
+                            -->
                         </tr>
                         <tr>
-                            <td></td>
-                            <td>
+                            <td class='b0'></td>
+                            <td colspan="10" align="right" style="padding-right: 8px !important;">
                                 <div style="float:left">
                                     Group By: 
                                     <select style="width:200px;" name="groupby">
                                         <option value="timer">Timer</option>
                                         <option value="group,timer">Group + Timer</option>
+                                        <option value="group,info">Group + Info</option>
                                     </select>
                                 </div>
                                 <div style="float:right">
                                     <button class="refresh_button">Refresh</button>
                                 </div>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
                         <tr>
@@ -186,13 +191,13 @@
 
                 <!-- SLOW TOP -->
                 <div id="slow" class="profiler_block">
-                    <h1>Slow Top</h1>
+                    <!--<h1>Slow Top</h1>-->
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr class="f bo">
                             <td class='b0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
-                            <td>Statistic</td>
+                            <td><!--Statistic--></td>
                             <td class="ff" align="right">
                                 Total<br />
                                 Count
@@ -201,11 +206,12 @@
                         <tr class="b0">
                             <td class='b0'>#></td>
                             <td>
-                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="group.1/pimer/*/*" />
+                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="group.1/timer.3/*/*" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_slow" /></td>
                             <td colspan="2" align="left">
+                                <!--
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
                                     <option value="max">Max Time (red)</option>
@@ -215,6 +221,7 @@
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
                                 </select>
+                                -->
                             </td>
                         </tr>
                         <tr>
@@ -236,13 +243,13 @@
 
                 <!-- GROUPS -->
                 <div id="groups" class="profiler_block">
-                    <h1>Groups</h1>
+                    <!--<h1>Groups</h1>-->
                     <table class="m profiler_table" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr class="f bo">
                             <td class='b0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
-                            <td>Statistic</td>
+                            <td><!--Statistic--></td>
                             <td class="ff" align="right">
                                 Total<br />
                                 Count
@@ -251,11 +258,12 @@
                         <tr class="b0">
                             <td class='b0'>#></td>
                             <td>
-                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="group.1/pimer/*/*" />
+                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="group.1/timer.3/*/*" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_groups" /></td>
                             <td colspan="2" align="left">
+                                <!--
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
                                     <option value="max">Max Time (red)</option>
@@ -265,6 +273,7 @@
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
                                 </select>
+                                -->
                             </td>
                         </tr>
                         <tr>
@@ -286,13 +295,13 @@
 
                 <!-- TIME GRAPH -->
                 <div id="time" class="profiler_block">
-                    <h1>Time Graph</h1>
+                    <!--<h1>Time Graph</h1>-->
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr class="f bo">
                             <td class='b0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
-                            <td>Statistic</td>
+                            <td><!--Statistic--></td>
                             <td class="ff" align="right">
                                 Total<br />
                                 Count
@@ -301,11 +310,12 @@
                         <tr class="b0">
                             <td class='b0'>#></td>
                             <td>
-                                <input name="filter" style="width:95%; height:35px; font-size:14px;" value="" />
+                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="" />
                                 [?]
                             </td>
                             <td><input type="hidden" name="r" value="stat_graph" /></td>
                             <td colspan="2" align="left">
+                                <!--
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
                                     <option value="max">Max Time (red)</option>
@@ -315,6 +325,7 @@
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
                                 </select>
+                                -->
                             </td>
                         </tr>
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
@@ -327,6 +338,7 @@
                     </table>
                 </div> <!-- END OF time -->
 
+                <!-- SETTINGS -->
                 <div id="settings" class="profiler_block">
                     <h1>Settings</h1>
                 </div> <!-- END OF settings -->
@@ -344,6 +356,10 @@
         var grid = elem.find('table.profiler_grid');
         var button = elem.find('.refresh_button');
         var query  = elem.find(':input').serialize();
+        
+        if (grid.length == 0) {
+            return false;
+        }
 
         if (typeof(checkEmpty) == 'undefined') {
             checkEmpty = false;
@@ -400,6 +416,9 @@
                     dd.join(' / ')+
                     '    </td>'+
                     '    <td></td>'+
+                    (typeof(item.time.current) != 'undefined' ?
+                    '    <td align="right">'+item.time.current+'ms</td>' 
+                    :
                     '    <td width="'+(lineBarLength+55)+'">'+
                     '        <table width="100%" class="b" cellpadding="0" cellspacing="0">'+
                     '            <tr>'+
@@ -420,7 +439,7 @@
                     '        '+item.time.total+'ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
-                    '</tr>'+
+                    '</tr>')+
                 '');
             });
         }).complete(function(){
