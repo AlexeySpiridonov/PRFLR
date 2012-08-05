@@ -7,9 +7,11 @@
         <style type="text/css">
             table {font-size:14px;}
             table.m td {margin-top:4px;padding-right:16px;}
+            table.profiler_grid {width: 100.5% !important}
             tr.f td {font-size:30px;}
             table tr td.ff {font-size:15px;}
             table tr td.dd {font-size:18px;padding-top:10px; padding-bottom: 10px}
+            table tr td.ll {padding-right: 0px !important}
             .timer {font-size:18px;}
             .group {font-size:15px;}
             .info {font-size:12px;}
@@ -118,7 +120,6 @@
                                 <button class="refresh_button">Refresh</button>
                             </td>
                         </tr>
-                        <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
                         <tr>
                             <td class='b0'></td>
                             <td colspan="20">
@@ -169,9 +170,9 @@
                                 <div style="float:left">
                                     Group By: 
                                     <select style="width:200px;" name="groupby">
-                                        <option value="timer">Timer</option>
                                         <option value="group,timer">Group + Timer</option>
-                                        <option value="group,info">Group + Info</option>
+                                        <option value="group">Group</option>
+                                        <option value="timer">Timer</option>
                                     </select>
                                 </div>
                                 <div style="float:right">
@@ -179,7 +180,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
+                        <!--<tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>-->
                         <tr>
                             <td class='b0'></td>
                             <td colspan="20">
@@ -234,7 +235,7 @@
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
                         <tr>
                             <td class='b0'></td>
-                            <td colspan="20">
+                            <td colspan="20" style="padding-right: 0px !important">
                                 <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
                             </td>
                         </tr>
@@ -286,7 +287,7 @@
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
                         <tr>
                             <td class='b0'></td>
-                            <td colspan="20">
+                            <td colspan="20" style="padding-right: 0px !important">
                                 <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
                             </td>
                         </tr>
@@ -331,7 +332,7 @@
                         <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
                         <tr>
                             <td class='b0'></td>
-                            <td colspan="20">
+                            <td colspan="20" style="padding-right: 0px !important">
                                 <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
                             </td>
                         </tr>
@@ -374,7 +375,7 @@
         grid.css('opacity', 0.3);
         button.css('color', 'grey').html('Loading...');
         $.getJSON('./api.php?'+query, function(data){
-            grid.empty();
+            grid.empty().append('<tr class="b1"><td colspan="5">&nbsp;</td></tr>');
 
             if (data == null) return false;
 
@@ -417,7 +418,7 @@
                     '    </td>'+
                     '    <td></td>'+
                     (typeof(item.time.current) != 'undefined' ?
-                    '    <td align="right">'+item.time.current+'ms</td>' 
+                    '    <td align="right" class="ll">'+item.time.current+'ms</td>' 
                     :
                     '    <td width="'+(lineBarLength+55)+'">'+
                     '        <table width="100%" class="b" cellpadding="0" cellspacing="0">'+
@@ -435,7 +436,7 @@
                     '            </tr>'+
                     '        </table>'+
                     '    </td>'+
-                    '    <td align="right" width="65">'+
+                    '    <td align="right" width="65" class="ll">'+
                     '        '+item.time.total+'ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
