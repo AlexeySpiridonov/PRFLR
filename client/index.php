@@ -100,24 +100,26 @@
                             <td colspan="10">
                                 <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
-                            <!--
-                            <td colspan="2" align="left">
-                                Sort By: 
-                                <select style="width:200px;" name="sortby">
-                                    <option value="max">Max Time (red)</option>
-                                    <option value="avg">Avg Time (green)</option>
-                                    <option value="max">Min Time (blue)</option>
-                                    <option value="total">Total Time</option>
-                                    <option value="count">Count</option>
-                                    <option value="dispersion">Dispersion</option>
-                                </select>
-                            </td>
-                            -->
                         </tr>
                         <tr>
                             <td class='b0'>&nbsp;</td>
                             <td colspan="10" align="right" style="padding-right: 8px !important;">
-                                <button class="refresh_button">Refresh</button>
+                                <div style="float:left">
+                                     Sort By: 
+                                    <select style="width:200px;" name="sortby">
+                                        <!--
+                                        <option value="max">Max Time (red)</option>
+                                        <option value="avg">Avg Time (green)</option>
+                                        <option value="max">Min Time (blue)</option>
+                                        -->
+                                        <option value="total">Total Time</option>
+                                        <option value="count">Count</option>
+                                        <option value="dispersion">Dispersion</option>
+                                    </select>
+                                </div>
+                                <div style="float:right">
+                                    <button class="refresh_button">Refresh</button>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -140,18 +142,18 @@
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
                             <td><!--Statistic--></td>
-                            <td class="ff" align="right">
+                            <td colspan="20" class="ff" align="right">
                                 Total<br/>
                                 Count
                             </td>
                         </tr>
                         <tr>
                             <td class='b0'>#><input type="hidden" name="r" value="stat_aggregate" /></td>
-                            <td colspan="10">
-                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/timer.3/*/*" />
+                            <td colspan="10" style="width: 480px">
+                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
-                            <!--
-                            <td colspan="2" align="left">
+                            <td></td>
+                            <td align="left">
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
                                     <option value="max">Max Time (red)</option>
@@ -162,7 +164,6 @@
                                     <option value="dispersion">Dispersion</option>
                                 </select>
                             </td>
-                            -->
                         </tr>
                         <tr>
                             <td class='b0'></td>
@@ -189,155 +190,6 @@
                         </tr>
                     </table>
                 </div> <!-- END OF agg -->
-
-                <!-- SLOW TOP -->
-                <div id="slow" class="profiler_block">
-                    <!--<h1>Slow Top</h1>-->
-                    <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
-                        <tr class="f bo">
-                            <td class='b0'></td>
-                            <td>Group / Timer / Info / Thread</td>
-                            <td></td>
-                            <td><!--Statistic--></td>
-                            <td class="ff" align="right">
-                                Total<br />
-                                Count
-                            </td>
-                        </tr>
-                        <tr class="b0">
-                            <td class='b0'>#></td>
-                            <td>
-                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="group.1/timer.3/*/*" />
-                                [?]
-                            </td>
-                            <td><input type="hidden" name="r" value="stat_slow" /></td>
-                            <td colspan="2" align="left">
-                                <!--
-                                Sort By: 
-                                <select style="width:200px;" name="sortby">
-                                    <option value="max">Max Time (red)</option>
-                                    <option value="avg">Avg Time (green)</option>
-                                    <option value="max">Min Time (blue)</option>
-                                    <option value="total">Total Time</option>
-                                    <option value="count">Count</option>
-                                    <option value="dispersion">Dispersion</option>
-                                </select>
-                                -->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div style="float:right">
-                                    <button class="refresh_button">Refresh</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
-                        <tr>
-                            <td class='b0'></td>
-                            <td colspan="20" style="padding-right: 0px !important">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
-                            </td>
-                        </tr>
-                    </table>
-                </div> <!-- END OF slow -->
-
-                <!-- GROUPS -->
-                <div id="groups" class="profiler_block">
-                    <!--<h1>Groups</h1>-->
-                    <table class="m profiler_table" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr class="f bo">
-                            <td class='b0'></td>
-                            <td>Group / Timer / Info / Thread</td>
-                            <td></td>
-                            <td><!--Statistic--></td>
-                            <td class="ff" align="right">
-                                Total<br />
-                                Count
-                            </td>
-                        </tr>
-                        <tr class="b0">
-                            <td class='b0'>#></td>
-                            <td>
-                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="group.1/timer.3/*/*" />
-                                [?]
-                            </td>
-                            <td><input type="hidden" name="r" value="stat_groups" /></td>
-                            <td colspan="2" align="left">
-                                <!--
-                                Sort By: 
-                                <select style="width:200px;" name="sortby">
-                                    <option value="max">Max Time (red)</option>
-                                    <option value="avg">Avg Time (green)</option>
-                                    <option value="max">Min Time (blue)</option>
-                                    <option value="total">Total Time</option>
-                                    <option value="count">Count</option>
-                                    <option value="dispersion">Dispersion</option>
-                                </select>
-                                -->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div style="float:right">
-                                    <button class="refresh_button">Refresh</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
-                        <tr>
-                            <td class='b0'></td>
-                            <td colspan="20" style="padding-right: 0px !important">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
-                            </td>
-                        </tr>
-                    </table>
-                </div> <!-- END OF groups -->
-
-                <!-- TIME GRAPH -->
-                <div id="time" class="profiler_block">
-                    <!--<h1>Time Graph</h1>-->
-                    <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr class="f bo">
-                            <td class='b0'></td>
-                            <td>Group / Timer / Info / Thread</td>
-                            <td></td>
-                            <td><!--Statistic--></td>
-                            <td class="ff" align="right">
-                                Total<br />
-                                Count
-                            </td>
-                        </tr>
-                        <tr class="b0">
-                            <td class='b0'>#></td>
-                            <td>
-                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="" />
-                                [?]
-                            </td>
-                            <td><input type="hidden" name="r" value="stat_graph" /></td>
-                            <td colspan="2" align="left">
-                                <!--
-                                Sort By: 
-                                <select style="width:200px;" name="sortby">
-                                    <option value="max">Max Time (red)</option>
-                                    <option value="avg">Avg Time (green)</option>
-                                    <option value="max">Min Time (blue)</option>
-                                    <option value="total">Total Time</option>
-                                    <option value="count">Count</option>
-                                    <option value="dispersion">Dispersion</option>
-                                </select>
-                                -->
-                            </td>
-                        </tr>
-                        <tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>
-                        <tr>
-                            <td class='b0'></td>
-                            <td colspan="20" style="padding-right: 0px !important">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
-                            </td>
-                        </tr>
-                    </table>
-                </div> <!-- END OF time -->
 
                 <!-- SETTINGS -->
                 <div id="settings" class="profiler_block">
