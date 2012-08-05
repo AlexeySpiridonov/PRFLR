@@ -3,13 +3,10 @@
 -behaviour(application).
 
 
--import(string, [tokens/2, to_integer/1, to_float/1]).
+-import(string, [tokens/2, to_float/1]).
 
 %% Application callbacks
-
-% delete after debugging!
--export([start/0, stop/1, makemessage/1]).
-%-export([start/2, stop/1]).
+-export([start/2, stop/1]).
 
 %% ===================================================================
 %% Application callbacks
@@ -43,11 +40,12 @@ end.
 
 makemessage(Bin) ->
     [Thread, Group, Timer, Duration, Info] = tokens(binary_to_list(Bin), "|"),
+    {Fldr,[]} = to_float(Duration),
     {
                         thread, iolist_to_binary(Thread), 
                         timer,  iolist_to_binary(Timer), 
                         group,  iolist_to_binary(Group), 
-                        % duration, Duration,    Fucken erlang! How to convert string to float for mongoDB?
+                        duration, Fldr,
                         info,   iolist_to_binary(Info)
     }.
 
