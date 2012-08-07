@@ -14,10 +14,10 @@
             
             #revert_gif {position: relative}
             
-            .r1 {width:650px}
+            .r1 {width:750px}
             .r2 {width:270px}
-            .r3 {width:60px}
-            .r4 {width:60px}
+            .r3 {width:45px;padding-left:15px;}
+            .r4 {width:60px; text-align: right;}
             
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
@@ -171,21 +171,17 @@
                         <tr>
                             <td class='r0'></td>
                             <td align="right">
-                                <div style="float:left">
                                     Group By: 
                                     <select style="width:200px;" name="groupby">
                                         <option value="group,timer">Group + Timer</option>
                                         <option value="group">Group</option>
                                         <option value="timer">Timer</option>
                                     </select>
-                                </div>
-                                <div style="float:right">
-                                    <button class="refresh_button">Refresh</button>
-                                </div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
                             </td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td><button class="refresh_button">Refresh</button></td>
                         </tr>
                         <tr>
                             <td class='b0'></td>
