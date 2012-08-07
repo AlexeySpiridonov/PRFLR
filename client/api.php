@@ -109,7 +109,7 @@ if (prev.time.max < obj.time.current) prev.time.max = obj.time.current;
                     $bb = $b['time']['total'] / $b['count'];
                 } elseif ($sort == "dispersion") {
                     $aa = ($a['time']['max'] - $a['time']['min']) / ($a['time']['total'] / $a['count']);
-                    $bb = ($a['time']['max'] - $a['time']['min']) / ($b['time']['total'] / $b['count']);
+                    $bb = ($b['time']['max'] - $b['time']['min']) / ($b['time']['total'] / $b['count']);
                 } else {
                     $aa = $a['time'][$sort];
                     $bb = $b['time'][$sort];
