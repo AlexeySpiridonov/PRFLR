@@ -95,14 +95,15 @@
                                 <td class="r1 f30">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30"></td>
                                 <td class="r3"></td>
-                                <td class="r4 f15">
-                                    Current<br/>
+                                <td class="r4 f20">
+                                    Time<br/>
+                                    
                                 </td>
                             </tr>
                             <tr>
-                                <td class='r0'>#></td>
+                                <td class='r0'>#>&nbsp;</td>
                                 <td>
-                                    <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                    <input name="filter" style="width:700px; height:35px; font-size:14px;" value="*/*/*/*" />
                                 </td>
                                 <td align="left"></td>
                                 <td></td>
@@ -267,7 +268,7 @@
                     '<tr class="b1">'+
                     '    <td class="r1">' + dd.join(' / ')+'</td>'+
                     (typeof(item.time.current) != 'undefined' ?
-                    '    <td align="right" class="r4">'+item.time.current+'ms</td>' 
+                    '    <td class="r2"></td><td class="r3"><div style="height:18;"/></td><td align="right" class="r4">'+item.time.current+'ms</td>' 
                 :
                     '    <td class="r2">'+
                     '        <div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:6px"/>'+
