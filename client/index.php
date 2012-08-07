@@ -16,7 +16,7 @@
             
             #revert_gif {position: relative}
             
-            .r1 {border:none!important;padding-right:0px!important;}
+            .r1 {width:600px}
             .r2 {width:270px}
             .r3 {width:20px}
             .r4 {width:30px}
