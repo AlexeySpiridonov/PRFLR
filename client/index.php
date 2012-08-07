@@ -14,10 +14,10 @@
 
             #revert_gif {position: relative}
 
-            .r1 {width:750px}
+            .r1 {width:750px; padding-left:10px;}
             .r2 {width:270px}
-            .r3 {width:45px;padding-left:15px;}
-            .r4 {width:60px; text-align: right;}
+            .r3 {width:50px;padding-left:15px;}
+            .r4 {width:60px; text-align: right; padding-right:10px}
 
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
@@ -139,7 +139,7 @@
                                 <td class="r1 f30">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30">Statistic</td>
                                 <td class="r3"></td>
-                                <td class="r4 f15">
+                                <td class="r4 f20">
                                     Total<br/>
                                     Count
                                 </td>
@@ -147,11 +147,11 @@
                             <tr>
                                 <td class='r0'>#>&nbsp;</td>
                                 <td>
-                                    <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                    <input name="filter" style="width:700px; height:35px; font-size:14px;" value="*/*/*/*" />
                                 </td>
                                 <td align="left">
                                     Sort By: 
-                                    <select style="width:200px;" name="sortby">
+                                    <select style="width:160px;" name="sortby">
                                         <option value="max">Max Time (red)</option>
                                         <option value="average">Avg Time (green)</option>
                                         <option value="min">Min Time (blue)</option>
@@ -166,7 +166,7 @@
                             <tr>
                                 <td class='r0'></td>
                                 <td align="right">
-                                    <div style="padding-right:100px;">
+                                    <div style="padding-right:75px;">
                                         Group By: 
                                         <select style="width:200px;" name="groupby">
                                             <option value="group,timer">Group + Timer</option>
