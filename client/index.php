@@ -103,7 +103,7 @@
                         <tr>
                             <td class='r0'>#></td>
                             <td>
-                                <input name="filter" style="width:550px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                             <td align="left"></td>
                             <td></td>
@@ -111,13 +111,9 @@
                         </tr>
                         <tr>
                             <td class='r0'></td>
-                            <td align="right">
-                                <div style="float:right">
-                                    <button class="refresh_button">Refresh</button>
-                                </div>
-                                  
+                            <td>             
                             </td>
-                            <td></td>
+                            <td><td><button class="refresh_button">Refresh</button></td></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -152,7 +148,7 @@
                         <tr>
                             <td class='r0'>#>&nbsp;</td>
                             <td>
-                                <input name="filter" style="width:550px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                             <td align="left">
                                 Sort By: 
@@ -179,9 +175,9 @@
                                     </select>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                             </td>
-                            <td></td>
-                            <td></td>
                             <td><button class="refresh_button">Refresh</button></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td class='b0'></td>
