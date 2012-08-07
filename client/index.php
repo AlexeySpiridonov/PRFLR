@@ -80,7 +80,7 @@
                     <h1 id="tab_menu">
                         <a href="#last">Raw Timers</a> | <a href="#agg">Statistic</a><!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>--> | <a href="#settings">Settings</a>
                     </h1>
-                    <img id="revert_gif" src="revert.gif" border=0 height="40"/>
+                    <img id="revert_gif" src="revert.gif" border=0 height="70"/>
                 </td>
             </table>
             <div style="padding:15px;">
@@ -104,7 +104,7 @@
                         </tr>
                         <tr>
                             <td class='r0'>#></td>
-                            <td width="90%">
+                            <td>
                                 <input name="filter" style="width:550px; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                             <td align="left"></td>
