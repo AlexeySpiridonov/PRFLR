@@ -5,11 +5,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
         <style type="text/css">
-            table.profiler_grid {width: 100.5% !important}
+            table.profiler_grid2 {width: 100.5% !important}
             
             .b1 td {border-bottom:1px solid #808080;}
-
-            
+          
             .profiler_block {display: none;padding-bottom:50px}
             .refresh_button {margin-left: 10px;}
             
@@ -90,7 +89,7 @@
                     
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                         <input type="hidden" name="r" value="stat_last" />
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                    <table border="0" cellpadding="0" cellspacing="0"> 
                         <tr>
                             <td class='r0 f15'></td>
                             <td class="r1 f30">Group / Timer / Info / Thread</td>
