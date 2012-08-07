@@ -140,7 +140,7 @@
 
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                         <input type="hidden" name="r" value="stat_aggregate" />
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                    <table border="0" cellpadding="0" cellspacing="0"> 
                         <tr>
                             <td class='r0 f15'></td>
                             <td class="r1 f30">Group / Timer / Info / Thread</td>
