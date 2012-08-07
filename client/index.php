@@ -84,6 +84,7 @@
                 <div id="last" class="profiler_block">
                     <!--<h1>Raw Timers</h1>-->
                     
+                    <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr class="f bo">
                             <td class='b0'></td>
@@ -129,6 +130,7 @@
                             </td>
                         </tr>
                     </table>
+                    </form>
                 </div> <!-- END OF last -->
 
                 <!-- STATISTIC -->
@@ -136,6 +138,7 @@
 
                     <!--<h1>Statistic</h1>-->
 
+                    <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr class="f bo">
                             <td class='b0'></td>
@@ -189,6 +192,7 @@
                             </td>
                         </tr>
                     </table>
+                    </form>
                 </div> <!-- END OF agg -->
 
                 <!-- SETTINGS -->

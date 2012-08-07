@@ -167,8 +167,8 @@ if (prev.time.max < obj.time.current) prev.time.max = obj.time.current;
 
 }
 
-$d = new dispatcher("mongodb://prflr:prflr@188.127.227.36");
-//$d = new dispatcher("mongodb://prflr:prflr@127.0.0.1/prflr");
+//$d = new dispatcher("mongodb://prflr:prflr@188.127.227.36");
+$d = new dispatcher("mongodb://prflr:prflr@127.0.0.1/prflr");
 $r = str_replace('/', '_', $_GET['r']);
 eval('$r = $d->' . $r . '();');
 echo json_encode($r);
