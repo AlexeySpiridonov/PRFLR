@@ -6,10 +6,9 @@
         <script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
         <style type="text/css">
             table.profiler_grid {width: 100.5% !important}
-            tr.f td {font-size:30px;}
             
             .b1 td {border-bottom:1px solid #808080;}
-            table.b td {margin-top:0px;border:0px solid #808080;font-size:10px;}
+
             
             .profiler_block {display: none;padding-bottom:50px}
             .refresh_button {margin-left: 10px;}
@@ -126,7 +125,7 @@
                         <tr>
                             <td class='b0'></td>
                             <td colspan="4">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
+                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0"></table>
                             </td>
                         </tr>
                     </table>
@@ -192,7 +191,7 @@
                         <tr>
                             <td class='b0'></td>
                             <td colspan="4">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
+                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0"></table>
                             </td>
                         </tr>
                     </table>
@@ -284,8 +283,8 @@
                     '        <div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:6px"/>'+
                     '        <div style="background-color: #ff0000;width:'+(max > 0 ? max*scale : 1)+'px;height:6px"/>'+
                     '    </td>'+
-                    '    <td class="r3 f10">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
-                    '    <td align="right" class="r4 f12">'+
+                    '    <td class="r3 f12">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
+                    '    <td align="right" class="r4 f15">'+
                     '        '+item.time.total+'&nbsp;ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
