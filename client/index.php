@@ -24,6 +24,19 @@
             .refresh_button {margin-left: 10px;}
             
             #revert_gif {position: relative}
+            
+            .r1 {}
+            .r2 {width:270px}
+            .r3 {width:20px}
+            .r4 {width:30px}
+            
+            .f10 {font-size:10px;}
+            .f12 {font-size:12px;}
+            .f15 {font-size:15px;}
+            .f18 {font-size:18px;}
+            .f20 {font-size:20px;}
+            .f25 {font-size:25px;}
+            .f30 {font-size:30px;}
         </style>
         <script type="text/javascript">
             var inProgress    = false;
@@ -72,10 +85,11 @@
                     <img src="prflr.gif" width="250" />
                 </td>
                 <td>
+                    <br></br>
                     <h1 id="tab_menu">
                         <a href="#last">Raw Timers</a> | <a href="#agg">Statistic</a><!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>--> | <a href="#settings">Settings</a>
                     </h1>
-                    <img id="revert_gif" src="revert.gif" border=0 />
+                    <img id="revert_gif" src="revert.gif" border=0 height="40"/>
                 </td>
             </table>
             <div style="padding:15px;">
@@ -135,24 +149,24 @@
                     <!--<h1>Statistic</h1>-->
 
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
+                        <input type="hidden" name="r" value="stat_aggregate" />
                     <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr class="f bo">
-                            <td class='b0'></td>
-                            <td>Group / Timer / Info / Thread</td>
-                            <td></td>
-                            <td colspan="20" class="ff" align="right">
-                                <div style="float:left;font-size:30px;margin-left:27px;">Statistic</div>
+                            <td class='b0 r0'></td>
+                            <td class="f30">Group / Timer / Info / Thread</td>
+                            <td class="ff r1 f30">Statistic</td>
+                            <td class="r3"></td>
+                            <td class="r4 f15">
 				Total<br/>
                                 Count
                             </td>
                         </tr>
                         <tr>
-                            <td class='b0'>#><input type="hidden" name="r" value="stat_aggregate" /></td>
-                            <td colspan="10" style="width: 480px">
+                            <td class='b0'>#></td>
+                            <td width="90%">
                                 <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
-                            <td></td>
-                            <td align="left" style="padding-right:17px;">
+                            <td align="left">
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
                                     <option value="max">Max Time (red)</option>
@@ -163,10 +177,12 @@
                                     <option value="dispersion">Dispersion</option>
                                 </select>
                             </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td class='b0'></td>
-                            <td colspan="10" align="right" style="padding-right: 8px !important;">
+                            <td align="right">
                                 <div style="float:left">
                                     Group By: 
                                     <select style="width:200px;" name="groupby">
@@ -179,11 +195,13 @@
                                     <button class="refresh_button">Refresh</button>
                                 </div>
                             </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
-                        <!--<tr class="b1"><td class='b0'></td><td colspan="5">&nbsp;</td></tr>-->
                         <tr>
                             <td class='b0'></td>
-                            <td colspan="20">
+                            <td colspan="4">
                                 <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
                             </td>
                         </tr>
@@ -194,6 +212,7 @@
                 <!-- SETTINGS -->
                 <div id="settings" class="profiler_block">
                     <h1>Settings</h1>
+                    in near future :)
                 </div> <!-- END OF settings -->
 
             </div>
@@ -263,32 +282,20 @@
                 var min = item.time.min;
                 var avg = item.time.total / item.count;
                 var max = item.time.max;
+                
                 grid.append(''+
                     '<tr class="b1">'+
-                    '    <td class="dd">'+
-                    dd.join(' / ')+
-                    '    </td>'+
-                    '    <td></td>'+
+                    '    <td class="dd r1">' + dd.join(' / ')+'</td>'+
                     (typeof(item.time.current) != 'undefined' ?
-                    '    <td align="right" class="ll">'+item.time.current+'ms</td>' 
+                    '    <td align="right" class="ll r4">'+item.time.current+'ms</td>' 
                     :
-                    '    <td width="'+(lineBarLength+55)+'">'+
-                    '        <table width="100%" class="b" cellpadding="0" cellspacing="0">'+
-                    '            <tr>'+
-                    '                <td><div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:8px"></div></td>'+
-                    '                <td>'+min+'ms</td>'+
-                    '            </tr>'+
-                    '            <tr>' +
-                    '                <td><div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:8px"></div></td>'+
-                    '                <td>'+Math.round(avg)+'ms</td>'+
-                    '            </tr>'+
-                    '            <tr>' +
-                    '                <td width="'+lineBarLength+'"><div style="background-color: #ff0000;width:'+(max > 0 ? max*scale : 1)+'px;height:8px"></div></td>'+
-                    '                <td>'+max+'ms</td>'+
-                    '            </tr>'+
-                    '        </table>'+
+                    '    <td width="'+(lineBarLength+55)+'" class="r2">'+
+                    '        <div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:6px"/>'+
+                    '        <div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:6px"/>'+
+                    '        <div style="background-color: #ff0000;width:'+(max > 0 ? max*scale : 1)+'px;height:6px"/>'+
                     '    </td>'+
-                    '    <td align="right" width="65" class="ll">'+
+                    '    <td class="r3">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
+                    '    <td align="right" class="ll r4">'+
                     '        '+item.time.total+'ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
