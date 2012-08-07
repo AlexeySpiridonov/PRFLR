@@ -5,18 +5,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
         <style type="text/css">
-            table {font-size:14px;}
-            table.m td {margin-top:4px;padding-right:16px;}
             table.profiler_grid {width: 100.5% !important}
             tr.f td {font-size:30px;}
-            table tr td.ff {font-size:15px;}
-            table tr td.dd {font-size:18px;padding-top:10px; padding-bottom: 10px}
-            table tr td.ll {padding-right: 0px !important}
-            .timer {font-size:18px;}
-            .group {font-size:15px;}
-            .info {font-size:12px;}
-            .thread {font-size:10px;}
-            .b0 {border:none!important;padding-right:0px!important;}
+            
             .b1 td {border-bottom:1px solid #808080;}
             table.b td {margin-top:0px;border:0px solid #808080;font-size:10px;}
             
@@ -25,7 +16,7 @@
             
             #revert_gif {position: relative}
             
-            .r1 {}
+            .r1 {border:none!important;padding-right:0px!important;}
             .r2 {width:270px}
             .r3 {width:20px}
             .r4 {width:30px}
@@ -99,9 +90,9 @@
                     <!--<h1>Raw Timers</h1>-->
                     
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
-                    <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
-                        <tr class="f bo">
-                            <td class='b0'></td>
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                        <tr>
+                            <td class='r0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
                             <td><!--Statistic--></td>
@@ -150,11 +141,11 @@
 
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                         <input type="hidden" name="r" value="stat_aggregate" />
-                    <table class="m" border="0" cellpadding="0" cellspacing="0" width="100%"> 
-                        <tr class="f bo">
-                            <td class='b0 r0'></td>
-                            <td class="f30">Group / Timer / Info / Thread</td>
-                            <td class="ff r1 f30">Statistic</td>
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                        <tr>
+                            <td class='r0 f15'></td>
+                            <td class="r1 f30">Group / Timer / Info / Thread</td>
+                            <td class="r2 f30">Statistic</td>
                             <td class="r3"></td>
                             <td class="r4 f15">
 				Total<br/>
@@ -162,7 +153,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class='b0'>#></td>
+                            <td class='r0'>#></td>
                             <td width="90%">
                                 <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
@@ -181,7 +172,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td class='b0'></td>
+                            <td class='r0'></td>
                             <td align="right">
                                 <div style="float:left">
                                     Group By: 
@@ -268,16 +259,16 @@
 
                 var dd = [];
                 if (typeof(item.group)  != 'undefined') {
-                    dd.push('<span class="group">'+item.group+'</span>')
+                    dd.push('<span class="f18">'+item.group+'</span>')
                 }
                 if (typeof(item.timer)  != 'undefined') {
-                    dd.push('<span class="timer">'+item.timer+'</span>')
+                    dd.push('<span class="f20">'+item.timer+'</span>')
                 }
                 if (typeof(item.info)   != 'undefined') {
-                    dd.push('<span class="info">'+item.info+'</span>')
+                    dd.push('<span class="f12">'+item.info+'</span>')
                 }
                 if (typeof(item.thread) != 'undefined') {
-                    dd.push('<span class="thread">'+item.thread+'</span>')
+                    dd.push('<span class="f10">'+item.thread+'</span>')
                 }
                 var min = item.time.min;
                 var avg = item.time.total / item.count;
@@ -285,18 +276,18 @@
                 
                 grid.append(''+
                     '<tr class="b1">'+
-                    '    <td class="dd r1">' + dd.join(' / ')+'</td>'+
+                    '    <td class="r1">' + dd.join(' / ')+'</td>'+
                     (typeof(item.time.current) != 'undefined' ?
-                    '    <td align="right" class="ll r4">'+item.time.current+'ms</td>' 
+                    '    <td align="right" class="r4">'+item.time.current+'ms</td>' 
                     :
-                    '    <td width="'+(lineBarLength+55)+'" class="r2">'+
+                    '    <td class="r2">'+
                     '        <div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:6px"/>'+
                     '        <div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:6px"/>'+
                     '        <div style="background-color: #ff0000;width:'+(max > 0 ? max*scale : 1)+'px;height:6px"/>'+
                     '    </td>'+
-                    '    <td class="r3">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
-                    '    <td align="right" class="ll r4">'+
-                    '        '+item.time.total+'ms<br/>'+
+                    '    <td class="r3 f10">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
+                    '    <td align="right" class="r4 f12">'+
+                    '        '+item.time.total+'&nbsp;ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
                     '</tr>')+
