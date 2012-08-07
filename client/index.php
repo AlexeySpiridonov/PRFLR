@@ -106,17 +106,13 @@
                             <td class='b0'>&nbsp;</td>
                             <td colspan="10" align="right" style="padding-right: 8px !important;">
                                 <div style="float:left">
-                                     Sort By: 
+                                     <!--Sort By: 
                                     <select style="width:200px;" name="sortby">
-                                        <!--
-                                        <option value="max">Max Time (red)</option>
-                                        <option value="avg">Avg Time (green)</option>
-                                        <option value="max">Min Time (blue)</option>
-                                        -->
                                         <option value="total">Total Time</option>
                                         <option value="count">Count</option>
                                         <option value="dispersion">Dispersion</option>
                                     </select>
+			            -->
                                 </div>
                                 <div style="float:right">
                                     <button class="refresh_button">Refresh</button>
@@ -144,9 +140,9 @@
                             <td class='b0'></td>
                             <td>Group / Timer / Info / Thread</td>
                             <td></td>
-                            <td><!--Statistic--></td>
                             <td colspan="20" class="ff" align="right">
-                                Total<br/>
+                                <div style="float:left;font-size:30px;margin-left:27px;">Statistic</div>
+				Total<br/>
                                 Count
                             </td>
                         </tr>
@@ -156,12 +152,12 @@
                                 <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                             <td></td>
-                            <td align="left">
+                            <td align="left" style="padding-right:17px;">
                                 Sort By: 
                                 <select style="width:200px;" name="sortby">
                                     <option value="max">Max Time (red)</option>
-                                    <option value="avg">Avg Time (green)</option>
-                                    <option value="max">Min Time (blue)</option>
+                                    <option value="average">Avg Time (green)</option>
+                                    <option value="min">Min Time (blue)</option>
                                     <option value="total">Total Time</option>
                                     <option value="count">Count</option>
                                     <option value="dispersion">Dispersion</option>
