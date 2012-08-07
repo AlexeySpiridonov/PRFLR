@@ -14,10 +14,10 @@
             
             #revert_gif {position: relative}
             
-            .r1 {width:600px}
+            .r1 {width:650px}
             .r2 {width:270px}
-            .r3 {width:20px}
-            .r4 {width:30px}
+            .r3 {width:60px}
+            .r4 {width:60px}
             
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
@@ -150,8 +150,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class='r0'>#></td>
-                            <td width="90%">
+                            <td class='r0'>#>&nbsp;</td>
+                            <td>
                                 <input name="filter" style="width:550px; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                             <td align="left">
