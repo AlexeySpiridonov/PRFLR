@@ -14,10 +14,10 @@
 
             #revert_gif {position: relative}
 
-            .r1 {width:750px; padding-left:10px;}
+            .r1 {width:750px; padding-left:5px;}
             .r2 {width:270px}
             .r3 {width:50px;padding-left:15px;}
-            .r4 {width:60px; text-align: right; padding-right:10px}
+            .r4 {width:60px; text-align: right; padding-right:5px}
 
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
