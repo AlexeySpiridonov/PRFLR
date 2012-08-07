@@ -90,43 +90,42 @@
                     <!--<h1>Raw Timers</h1>-->
                     
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
+                        <input type="hidden" name="r" value="stat_last" />
                     <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
                         <tr>
-                            <td class='r0'></td>
-                            <td>Group / Timer / Info / Thread</td>
+                            <td class='r0 f15'></td>
+                            <td class="r1 f30">Group / Timer / Info / Thread</td>
+                            <td class="r2 f30"></td>
+                            <td class="r3"></td>
+                            <td class="r4 f15">
+				Current<br/>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='r0'>#></td>
+                            <td width="90%">
+                                <input name="filter" style="width:550px; height:35px; font-size:14px;" value="*/*/*/*" />
+                            </td>
+                            <td align="left"></td>
                             <td></td>
-                            <td><!--Statistic--></td>
-                            <td class="ff" align="right">
-                                Total<br />
-                                Count
-                            </td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td class='b0'>#><input type="hidden" name="r" value="stat_last" /></td>
-                            <td colspan="10">
-                                <input name="filter" style="width:400px; height:35px; font-size:14px;" value="*/*/*/*" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class='b0'>&nbsp;</td>
-                            <td colspan="10" align="right" style="padding-right: 8px !important;">
-                                <div style="float:left">
-                                     <!--Sort By: 
-                                    <select style="width:200px;" name="sortby">
-                                        <option value="total">Total Time</option>
-                                        <option value="count">Count</option>
-                                        <option value="dispersion">Dispersion</option>
-                                    </select>
-			            -->
-                                </div>
+                            <td class='r0'></td>
+                            <td align="right">
                                 <div style="float:right">
                                     <button class="refresh_button">Refresh</button>
                                 </div>
+                                  
                             </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td class='b0'></td>
-                            <td colspan="20">
+                            <td colspan="4">
                                 <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0" width="100%"></table>
                             </td>
                         </tr>
@@ -155,7 +154,7 @@
                         <tr>
                             <td class='r0'>#></td>
                             <td width="90%">
-                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
+                                <input name="filter" style="width:550px; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                             <td align="left">
                                 Sort By: 
