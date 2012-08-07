@@ -6,19 +6,19 @@
         <script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
         <style type="text/css">
             table.profiler_grid2 {width: 100.5% !important}
-            
+
             .b1 td {border-bottom:1px solid #808080;}
-          
+
             .profiler_block {display: none;padding-bottom:50px}
             .refresh_button {margin-left: 10px;}
-            
+
             #revert_gif {position: relative}
-            
+
             .r1 {width:750px}
             .r2 {width:270px}
             .r3 {width:45px;padding-left:15px;}
             .r4 {width:60px; text-align: right;}
-            
+
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
             .f15 {font-size:15px;}
@@ -86,44 +86,43 @@
                 <!-- RAW TIMERS -->
                 <div id="last" class="profiler_block">
                     <!--<h1>Raw Timers</h1>-->
-                    
+
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                         <input type="hidden" name="r" value="stat_last" />
-                    <table border="0" cellpadding="0" cellspacing="0"> 
-                        <tr>
-                            <td class='r0 f15'></td>
-                            <td class="r1 f30">Group / Timer / Info / Thread</td>
-                            <td class="r2 f30"></td>
-                            <td class="r3"></td>
-                            <td class="r4 f15">
-				Current<br/>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class='r0'>#></td>
-                            <td>
-                                <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
-                            </td>
-                            <td align="left"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class='r0'></td>
-                            <td>             
-                            </td>
-                            <td><td><button class="refresh_button">Refresh</button></td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class='b0'></td>
-                            <td colspan="4">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0"></table>
-                            </td>
-                        </tr>
-                    </table>
+                        <table border="0" cellpadding="0" cellspacing="0"> 
+                            <tr>
+                                <td class='r0 f15'></td>
+                                <td class="r1 f30">Group / Timer / Info / Thread</td>
+                                <td class="r2 f30"></td>
+                                <td class="r3"></td>
+                                <td class="r4 f15">
+                                    Current<br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='r0'>#></td>
+                                <td>
+                                    <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                </td>
+                                <td align="left"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class='r0'></td>
+                                <td>             
+                                </td>
+                                <td><td><button class="refresh_button">Refresh</button></td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class='b0'></td>
+                                <td colspan="4">
+                                    <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0"></table>
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div> <!-- END OF last -->
 
@@ -134,58 +133,59 @@
 
                     <form action="" method="GET" onsubmit="$(this).find('.refresh_button').click();return false">
                         <input type="hidden" name="r" value="stat_aggregate" />
-                    <table border="0" cellpadding="0" cellspacing="0"> 
-                        <tr>
-                            <td class='r0 f15'></td>
-                            <td class="r1 f30">Group / Timer / Info / Thread</td>
-                            <td class="r2 f30">Statistic</td>
-                            <td class="r3"></td>
-                            <td class="r4 f15">
-				Total<br/>
-                                Count
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class='r0'>#>&nbsp;</td>
-                            <td>
-                                <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
-                            </td>
-                            <td align="left">
-                                Sort By: 
-                                <select style="width:200px;" name="sortby">
-                                    <option value="max">Max Time (red)</option>
-                                    <option value="average">Avg Time (green)</option>
-                                    <option value="min">Min Time (blue)</option>
-                                    <option value="total">Total Time</option>
-                                    <option value="count">Count</option>
-                                    <option value="dispersion">Dispersion</option>
-                                </select>
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class='r0'></td>
-                            <td align="right">
-                                    Group By: 
-                                    <select style="width:200px;" name="groupby">
-                                        <option value="group,timer">Group + Timer</option>
-                                        <option value="group">Group</option>
-                                        <option value="timer">Timer</option>
+                        <table border="0" cellpadding="0" cellspacing="0"> 
+                            <tr>
+                                <td class='r0 f15'></td>
+                                <td class="r1 f30">Group / Timer / Info / Thread</td>
+                                <td class="r2 f30">Statistic</td>
+                                <td class="r3"></td>
+                                <td class="r4 f15">
+                                    Total<br/>
+                                    Count
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='r0'>#>&nbsp;</td>
+                                <td>
+                                    <input name="filter" style="width:720px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                </td>
+                                <td align="left">
+                                    Sort By: 
+                                    <select style="width:200px;" name="sortby">
+                                        <option value="max">Max Time (red)</option>
+                                        <option value="average">Avg Time (green)</option>
+                                        <option value="min">Min Time (blue)</option>
+                                        <option value="total">Total Time</option>
+                                        <option value="count">Count</option>
+                                        <option value="dispersion">Dispersion</option>
                                     </select>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                            </td>
-                            <td><button class="refresh_button">Refresh</button></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class='b0'></td>
-                            <td colspan="4">
-                                <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0"></table>
-                            </td>
-                        </tr>
-                    </table>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class='r0'></td>
+                                <td align="right">
+                                    <div style="padding-right:100px;">
+                                        Group By: 
+                                        <select style="width:200px;" name="groupby">
+                                            <option value="group,timer">Group + Timer</option>
+                                            <option value="group">Group</option>
+                                            <option value="timer">Timer</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td><button class="refresh_button">Refresh</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class='b0'></td>
+                                <td colspan="4">
+                                    <table class="m profiler_grid" border="0" cellpadding="0" cellspacing="0"></table>
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div> <!-- END OF agg -->
 
@@ -268,7 +268,7 @@
                     '    <td class="r1">' + dd.join(' / ')+'</td>'+
                     (typeof(item.time.current) != 'undefined' ?
                     '    <td align="right" class="r4">'+item.time.current+'ms</td>' 
-                    :
+                :
                     '    <td class="r2">'+
                     '        <div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:6px"/>'+
                     '        <div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:6px"/>'+
@@ -280,7 +280,7 @@
                     '        '+item.count+
                     '    </td>'+
                     '</tr>')+
-                '');
+                    '');
             });
         }).complete(function(){
             grid.css('opacity', 1);
