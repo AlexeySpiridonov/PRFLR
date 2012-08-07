@@ -104,7 +104,7 @@
                         <tr>
                             <td class='b0'>#><input type="hidden" name="r" value="stat_last" /></td>
                             <td colspan="10">
-                                <input name="filter" style="width:100%; height:35px; font-size:14px;" value="*/*/*/*" />
+                                <input name="filter" style="width:400px; height:35px; font-size:14px;" value="*/*/*/*" />
                             </td>
                         </tr>
                         <tr>
