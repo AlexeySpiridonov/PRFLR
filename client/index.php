@@ -5,7 +5,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script type="text/javascript" src="jquery-1.7.2.min.js"></script> 
         <style type="text/css">
-            table.profiler_grid2 {width: 100.5% !important}
 
             .b1 td {border-bottom:1px solid #808080;}
 
@@ -14,7 +13,7 @@
 
             #tab_menu  a {text-decoration: none; color: #000000;font-size:35px; padding-top:35px;}
             
-            .tabselected {text-shadow: 0 3px 4px #000000;color:#ffffff!important;}
+            .tabselected {text-shadow: 1px 2px 6px #000000;color:#ffffff!important;}
 
             .r1 {width:750px; padding-left:5px;}
             .r2 {width:270px}
@@ -73,11 +72,16 @@
         <div>
             <table>
                 <td width="250">
-                    <img src="prflr.gif" width="250" style="padding:0 4px 0 50px;"/>
+                    <img src="prflr.gif" width="250" style="padding:0 50px 0 5px;"/>
                 </td>
                 <td>
                     <div id="tab_menu">
-                        <a href="#last" class="tabselected">Raw Timers</a> | <a href="#agg">Statistic</a><!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>--> | <a href="#settings">Settings</a>
+                        <a href="#last" class="tabselected">Raw Timers</a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        <a href="#agg">Statistic</a>
+                        <!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>-->
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="#settings">Settings</a>
                     </div>
                 </td>
             </table>
