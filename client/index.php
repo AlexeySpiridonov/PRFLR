@@ -12,9 +12,9 @@
             .profiler_block {display: none;padding-bottom:50px}
             .refresh_button {margin-left: 10px;}
 
-            #tab_menu  a {text-decoration: none; color: #000000;}
+            #tab_menu  a {text-decoration: none; color: #000000;font-size:45px}
             
-            .tabselected {text-shadow: 0 3px 4px #000000;color:#ffffff;}
+            .tabselected {text-shadow: 0 3px 4px #000000;color:#ffffff!important;}
 
             .r1 {width:750px; padding-left:5px;}
             .r2 {width:270px}
@@ -96,8 +96,8 @@
                                 <td class="r1 f35">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30"></td>
                                 <td class="r3"></td>
-                                <td class="r4 f20">
-                                    Time<br/>
+                                <td class="r4 f18">
+                                    Time<br/>&nbsp;
                                     
                                 </td>
                             </tr>
@@ -141,7 +141,7 @@
                                 <td class="r1 f35">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30">Statistic</td>
                                 <td class="r3"></td>
-                                <td class="r4 f20">
+                                <td class="r4 f18">
                                     Total<br/>
                                     Count
                                 </td>
