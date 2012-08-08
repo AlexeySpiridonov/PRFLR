@@ -115,9 +115,8 @@
                             </tr>
                             <tr>
                                 <td class='r0'></td>
-                                <td>             
-                                </td>
-                                <td><td><button class="refresh_button">Refresh</button></td></td>
+                                <td></td>
+                                <td><button class="refresh_button">Refresh</button></td>
                                 <td></td>
                                 <td></td>
                             </tr>
