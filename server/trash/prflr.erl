@@ -34,7 +34,7 @@ makemessage(Bin) ->
                         thread, iolist_to_binary(Thread), 
                         timer,  iolist_to_binary(Timer), 
                         group,  iolist_to_binary(Group), 
-                        duration, Fldr,
+                        time,   { current, Fldr },
                         info,   iolist_to_binary(Info)
     }.
 
