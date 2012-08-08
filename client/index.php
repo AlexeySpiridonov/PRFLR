@@ -25,7 +25,7 @@
             .f18 {font-size:18px;}
             .f20 {font-size:20px;}
             .f25 {font-size:25px;}
-            .f30 {font-size:30px;}
+            .f30 {font-size:30px;text-shadow: 0 2px 4px #0000ff;}
         </style>
         <script type="text/javascript">
             var inProgress    = false;
