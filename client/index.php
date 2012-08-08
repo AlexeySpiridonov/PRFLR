@@ -12,7 +12,7 @@
             .profiler_block {display: none;padding-bottom:50px}
             .refresh_button {margin-left: 10px;}
 
-            #tab_menu  a {text-decoration: none; color: #000000;font-size:45px}
+            #tab_menu  a {text-decoration: none; color: #000000;font-size:35px; padding-top:35px;}
             
             .tabselected {text-shadow: 0 3px 4px #000000;color:#ffffff!important;}
 
@@ -73,13 +73,12 @@
         <div>
             <table>
                 <td width="250">
-                    <img src="prflr.gif" width="250" />
+                    <img src="prflr.gif" width="250" style="padding:0 4px 0 50px;"/>
                 </td>
                 <td>
-                    <br></br>
-                    <h1 id="tab_menu">
+                    <div id="tab_menu">
                         <a href="#last" class="tabselected">Raw Timers</a> | <a href="#agg">Statistic</a><!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>--> | <a href="#settings">Settings</a>
-                    </h1>
+                    </div>
                 </td>
             </table>
             <div style="padding:15px;">
@@ -93,7 +92,7 @@
                         <table border="0" cellpadding="0" cellspacing="0"> 
                             <tr>
                                 <td class='r0 f15'></td>
-                                <td class="r1 f35">Group / Timer / Info / Thread</td>
+                                <td class="r1 f30">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30"></td>
                                 <td class="r3"></td>
                                 <td class="r4 f18">
@@ -138,7 +137,7 @@
                         <table border="0" cellpadding="0" cellspacing="0"> 
                             <tr>
                                 <td class='r0 f15'></td>
-                                <td class="r1 f35">Group / Timer / Info / Thread</td>
+                                <td class="r1 f30">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30">Statistic</td>
                                 <td class="r3"></td>
                                 <td class="r4 f18">
