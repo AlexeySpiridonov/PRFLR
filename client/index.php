@@ -14,7 +14,7 @@
 
             #tab_menu  a {text-decoration: none; color: #000000;}
             
-            .tabselected {text-shadow: 0 2px 4px #5533ff;}
+            .tabselected {text-shadow: 0 3px 4px #000000;color:#ffffff;}
 
             .r1 {width:750px; padding-left:5px;}
             .r2 {width:270px}
@@ -28,6 +28,7 @@
             .f20 {font-size:20px;}
             .f25 {font-size:25px;}
             .f30 {font-size:30px;text-shadow: 0 2px 3px #5533ff;}
+            .f35 {font-size:35px;text2-shadow: 0 2px 3px #5533ff;}
         </style>
         <script type="text/javascript">
             var inProgress    = false;
@@ -92,7 +93,7 @@
                         <table border="0" cellpadding="0" cellspacing="0"> 
                             <tr>
                                 <td class='r0 f15'></td>
-                                <td class="r1 f30">Group / Timer / Info / Thread</td>
+                                <td class="r1 f35">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30"></td>
                                 <td class="r3"></td>
                                 <td class="r4 f20">
@@ -137,7 +138,7 @@
                         <table border="0" cellpadding="0" cellspacing="0"> 
                             <tr>
                                 <td class='r0 f15'></td>
-                                <td class="r1 f30">Group / Timer / Info / Thread</td>
+                                <td class="r1 f35">Group / Timer / Info / Thread</td>
                                 <td class="r2 f30">Statistic</td>
                                 <td class="r3"></td>
                                 <td class="r4 f20">
