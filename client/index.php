@@ -19,6 +19,10 @@
             .r2 {width:270px}
             .r3 {width:50px;padding-left:15px;}
             .r4 {width:60px; text-align: right; padding-right:5px}
+            
+            .rln {height:6px; background-color: #ff0000;}
+            .gln {height:6px; background-color: #00ff00;}
+            .bln {height:6px; background-color: #0000ff;}
 
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
@@ -256,13 +260,13 @@
                     dd.push('<span class="f18">'+item.group+'</span>')
                 }
                 if (typeof(item.timer)  != 'undefined') {
-                    dd.push('<span class="f20">'+item.timer+'</span>')
+                    dd.push('<span class="f25">'+item.timer+'</span>')
                 }
                 if (typeof(item.info)   != 'undefined') {
-                    dd.push('<span class="f12">'+item.info+'</span>')
+                    dd.push('<span class="f15">'+item.info+'</span>')
                 }
                 if (typeof(item.thread) != 'undefined') {
-                    dd.push('<span class="f10">'+item.thread+'</span>')
+                    dd.push('<span class="f12">'+item.thread+'</span>')
                 }
                 var min = item.time.min;
                 var avg = item.time.total / item.count;
@@ -271,17 +275,17 @@
                 grid.append(''+
                     '<tr class="b1">'+
                     '    <td class="r1">' + dd.join(' / ')+'</td>'+
-                    (typeof(item.time.current) != 'undefined' ?
-                    '    <td class="r2"></td><td class="r3"><div style="height:18;width:10px"&nbsp;</div></td><td align="right" class="r4">'+item.time.current+'ms</td>' 
+                (typeof(item.time.current) != 'undefined' ?
+                    '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+item.time.current+'ms</td>' 
                 :
                     '    <td class="r2">'+
-                    '        <div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:6px"/>'+
-                    '        <div style="background-color: #00ff00;width:'+(avg > 0 ? avg*scale : 1)+'px;height:6px"/>'+
-                    '        <div style="background-color: #ff0000;width:'+(max > 0 ? max*scale : 1)+'px;height:6px"/>'+
+                    '        <div class="bln" style="width:'+(min > 0 ? Math.round(min*scale) : 1)+'px;"/>'+
+                    '        <div class="gln" style="width:'+(avg > 0 ? Math.round(avg*scale) : 1)+'px;"/>'+
+                    '        <div class="rln" style="width:'+(max > 0 ? Math.round(max*scale) : 1)+'px;"/>'+
                     '    </td>'+
                     '    <td class="r3 f12">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
                     '    <td align="right" class="r4 f15">'+
-                    '        '+item.time.total+'&nbsp;ms<br/>'+
+                    '        '+item.time.total+'ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
                     '</tr>')+
