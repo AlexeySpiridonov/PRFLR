@@ -26,8 +26,8 @@
             .f18 {font-size:18px;}
             .f20 {font-size:20px;}
             .f25 {font-size:25px;}
-            .f30 {font-size:30px;text-shadow: 0 2px 3px #5533ff;}
-            .f35 {font-size:35px;text2-shadow: 0 2px 3px #5533ff;}
+            .f30 {font-size:30px;}
+            .f35 {font-size:35px;}
         </style>
         <script type="text/javascript">
             var inProgress    = false;
@@ -272,7 +272,7 @@
                     '<tr class="b1">'+
                     '    <td class="r1">' + dd.join(' / ')+'</td>'+
                     (typeof(item.time.current) != 'undefined' ?
-                    '    <td class="r2"></td><td class="r3"><div style="height:18;"/></td><td align="right" class="r4">'+item.time.current+'ms</td>' 
+                    '    <td class="r2"></td><td class="r3"><div style="height:18;width:10px">&nbsp;<br>&nbsp;<br>&nbsp;</div></td><td align="right" class="r4">'+item.time.current+'ms</td>' 
                 :
                     '    <td class="r2">'+
                     '        <div style="background-color: #0000ff;width:'+(min > 0 ? min*scale : 1)+'px;height:6px"/>'+
