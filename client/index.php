@@ -211,6 +211,10 @@
 </html>
 
 <script type="text/javascript">
+    function round(value)
+    {
+	return Math.round(value*10000)/10000;
+    }
     function renderDataGrid(selector, checkEmpty)
     {
         var elem = $(selector);
@@ -241,7 +245,7 @@
 
             // first calculate line bars scale
             // we should get the biggest max value and divide lineBarLength on this value
-            var maxMax = 0.1;
+            var maxMax = 0.000001;
             $.each(data, function(i, item){
                 if (typeof(item.time) == 'undefined')     return false;
                 if (typeof(item.time.max) == 'undefined') return false;
@@ -279,13 +283,13 @@
                     '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+item.time.current+'ms</td>' 
                 :
                     '    <td class="r2">'+
-                    '        <div class="bln" style="width:'+(min > 0 ? Math.round(min*scale) : 1)+'px;"/>'+
-                    '        <div class="gln" style="width:'+(avg > 0 ? Math.round(avg*scale) : 1)+'px;"/>'+
-                    '        <div class="rln" style="width:'+(max > 0 ? Math.round(max*scale) : 1)+'px;"/>'+
+                    '        <div class="bln" style="width:'+(min > 0 ? round(min*scale) : 1)+'px;"/>'+
+                    '        <div class="gln" style="width:'+(avg > 0 ? round(avg*scale) : 1)+'px;"/>'+
+                    '        <div class="rln" style="width:'+(max > 0 ? round(max*scale) : 1)+'px;"/>'+
                     '    </td>'+
-                    '    <td class="r3 f12">'+min+'ms<br>'+Math.round(avg)+'ms<br>'+max+'ms</td>'+
+                    '    <td class="r3 f12">'+min+'ms<br>'+round(avg)+'ms<br>'+max+'ms</td>'+
                     '    <td align="right" class="r4 f15">'+
-                    '        '+item.time.total+'ms<br/>'+
+                    '        '+round(item.time.total)+'ms<br/>'+
                     '        '+item.count+
                     '    </td>'+
                     '</tr>')+
