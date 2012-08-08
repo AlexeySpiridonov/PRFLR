@@ -14,7 +14,7 @@
 
             #tab_menu  a {text-decoration: none; color: #000000;}
             
-            .tabselected {text-shadow: 0 3px 4px #5555ff;}
+            .tabselected {text-shadow: 0 2px 4px #5533ff;}
 
             .r1 {width:750px; padding-left:5px;}
             .r2 {width:270px}
@@ -27,7 +27,7 @@
             .f18 {font-size:18px;}
             .f20 {font-size:20px;}
             .f25 {font-size:25px;}
-            .f30 {font-size:30px;text-shadow: 0 2px 3px #5555ff;}
+            .f30 {font-size:30px;text-shadow: 0 2px 3px #5533ff;}
         </style>
         <script type="text/javascript">
             var inProgress    = false;
@@ -53,7 +53,8 @@
                     renderDataGrid(selector, true);
                     
                     //TODO   add  .tabselected  to clicked tab
-                    
+                    $('#tab_menu a').removeClass('tabselected');
+                    $(this).addClass('tabselected');
                     
                     return false;
                 });
