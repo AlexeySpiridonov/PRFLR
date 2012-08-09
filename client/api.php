@@ -85,7 +85,7 @@ if (prev.time.max < obj.time.current) prev.time.max = obj.time.current;
     public function stat_last()
     {
         $criteria = $this->prepareCriteria();
-        $data = $this->data->find($criteria)->limit(50);
+        $data = $this->data->find($criteria)->limit(100);
         return $this->out($data);
     }
 

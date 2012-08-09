@@ -19,7 +19,7 @@ loop(Socket, Conn) ->
     inet:setopts(Socket, [{active, once}]),
         receive
             {udp, Socket, Host, Port, Bin} ->
-                io:format("Server received:~p~n",[Bin]),
+                %io:format("Server received:~p~n",[Bin]),
                 mongo:do (safe, master, Conn, prflr, fun() ->  
                    mongo:insert(timers, makemessage(Bin))
                 end),      
