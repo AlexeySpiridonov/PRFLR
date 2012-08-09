@@ -14,7 +14,8 @@
             #tab_menu  a {text-decoration: none; color: #000000;font-size:35px; padding-top:35px;}
             
             .tabselected {text-shadow: 1px 2px 6px #000000;color:#ffffff!important;}
-
+            
+            .r0 {width:20px;} 
             .r1 {width:720px; padding-left:5px;}
             .r2 {width:270px}
             .r3 {width:60px;padding-left:15px;}
