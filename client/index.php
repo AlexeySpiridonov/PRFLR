@@ -15,10 +15,12 @@
             
             .tabselected {text-shadow: 1px 2px 6px #000000;color:#ffffff!important;}
 
-            .r1 {width:750px; padding-left:5px;}
+            .r1 {width:720px; padding-left:5px;}
             .r2 {width:270px}
-            .r3 {width:50px;padding-left:15px;}
-            .r4 {width:60px; text-align: right; padding-right:5px}
+            .r3 {width:60px;padding-left:15px;}
+            .r4 {width:80px; text-align: right; padding-right:5px}
+            
+            .cp {width:670px; height:35px; font-size:16px;}
             
             .rln {height:6px; background-color: #ff0000;min-width:1.5px;}
             .gln {height:6px; background-color: #00ff00;min-width:1.5px;}
@@ -112,16 +114,16 @@
                             <tr>
                                 <td class='r0'>#>&nbsp;</td>
                                 <td>
-                                    <input name="filter" style="width:700px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                    <input name="filter" class='cp' value="*/*/*/*" />
                                 </td>
-                                <td align="left"></td>
+                                <td><button class="refresh_button">Refresh</button></td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td class='r0'></td>
                                 <td></td>
-                                <td><button class="refresh_button">Refresh</button></td>
+                                <td>&nbsp;</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -156,7 +158,7 @@
                             <tr>
                                 <td class='r0'>#>&nbsp;</td>
                                 <td>
-                                    <input name="filter" style="width:700px; height:35px; font-size:14px;" value="*/*/*/*" />
+                                    <input name="filter" class='cp' value="*/*/*/*" />
                                 </td>
                                 <td align="left">
                                     Sort By: 
