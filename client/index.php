@@ -20,9 +20,9 @@
             .r3 {width:50px;padding-left:15px;}
             .r4 {width:60px; text-align: right; padding-right:5px}
             
-            .rln {height:6px; background-color: #ff0000;}
-            .gln {height:6px; background-color: #00ff00;}
-            .bln {height:6px; background-color: #0000ff;}
+            .rln {height:6px; background-color: #ff0000;min-width:1.5px;}
+            .gln {height:6px; background-color: #00ff00;min-width:1.5px;}
+            .bln {height:6px; background-color: #0000ff;min-width:1.5px;}
 
             .f10 {font-size:10px;}
             .f12 {font-size:12px;}
