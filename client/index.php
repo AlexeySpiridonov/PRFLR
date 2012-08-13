@@ -57,7 +57,8 @@
                     $(selector+' .refresh_button').click(function(){
                         renderDataGrid(selector);
                     });
-                    renderDataGrid(selector, true);
+                    //renderDataGrid(selector, true);
+                    renderDataGrid(selector, false);
                     
                     //TODO   add  .tabselected  to clicked tab
                     $('#tab_menu a').removeClass('tabselected');
