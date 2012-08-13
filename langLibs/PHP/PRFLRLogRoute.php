@@ -10,9 +10,9 @@
  */
 class PRFLRLogRoute extends CLogRoute {
 
-    public $PRFLRHost;
-    public $PRFLRPort = 4000;
-    public $group;
+    public $host;
+    public $port = 4000;
+    public $source;
 
     /**
      * @brief init log router
@@ -20,7 +20,7 @@ class PRFLRLogRoute extends CLogRoute {
     public function init() {
         parent::init();
         include_once(__DIR__ . '/prflr.php');
-        PRFLR::init($this->PRFLRHost, $this->PRFLRPort, $this->group);
+        PRFLR::init($this->host, $this->port, $this->source);
     }
 
     /**
