@@ -57,7 +57,8 @@
                     $(selector+' .refresh_button').click(function(){
                         renderDataGrid(selector);
                     });
-                    renderDataGrid(selector, true);
+                    //renderDataGrid(selector, true);
+                    renderDataGrid(selector, false);
                     
                     //TODO   add  .tabselected  to clicked tab
                     $('#tab_menu a').removeClass('tabselected');
@@ -210,6 +211,13 @@
             </div>
 
         </div>
+
+        <center>
+            <br/><br/><br/>
+            <br/><br/><br/>
+            <img src="http://bfolder.ru/_ph/2/1/814345841.jpg">
+            <br/><br/><br/>
+        </center>
     </body>
 </html>
 
