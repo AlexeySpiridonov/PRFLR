@@ -47,10 +47,15 @@
                     if (inProgress) {
                         return false;
                     }
+
+                    var filter = $('.profiler_block:visible').find('input[name=filter]').val();
+                    filter     = typeof(filter) != 'undefined' && filter.length > 0 ? filter : '*/*/*/*';
+
                     $('.profiler_block :input').unbind();
                     $('.profiler_block').hide();
                     var selector = $(this).attr('href');
                     $(selector).show();
+                    $(selector).find('input[name=filter]').val(filter);
                     $(selector+' :input').not('input[name="filter"]').change(function(e){
                         renderDataGrid(selector);
                     });
@@ -59,8 +64,8 @@
                     });
                     //renderDataGrid(selector, true);
                     renderDataGrid(selector, false);
-                    
-                    //TODO   add  .tabselected  to clicked tab
+
+                    // @TODO   add  .tabselected  to clicked tab
                     $('#tab_menu a').removeClass('tabselected');
                     $(this).addClass('tabselected');
                     
