@@ -211,6 +211,13 @@
             </div>
 
         </div>
+
+        <center>
+            <br/><br/><br/>
+            <br/><br/><br/>
+            <img src="http://bfolder.ru/_ph/2/1/814345841.jpg">
+            <br/><br/><br/>
+        </center>
     </body>
 </html>
 
