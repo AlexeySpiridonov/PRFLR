@@ -4,7 +4,7 @@
  *  HOW TO USE 
  * 
  * // configure profiler
- * // set  profiler server:port  and  set Group for timers 
+ * // set  profiler server:port  and  set source for timers 
  * PRFLR::init('localhost','4000','192.168.1.45-testApp');
  * 
  * 
@@ -23,16 +23,16 @@ class PRFLR {
 
     private static $sender;
 
-    public static function init($ip, $port, $group) {
+    public static function init($ip, $port, $source) {
         self::$sender = new PRFLRSender();
         self::$sender->ip = gethostbyname($ip);
         self::$sender->port = $port;
         if (!self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))
             throw new Exception('Can\'t open socket.');
-        if (!$group)
-            self::$sender->group = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
+        if (!$source)
+            self::$sender->source = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
         else
-            self::$sender->group = $group;
+            self::$sender->source = $source;
         self::$sender->thread = uniqid();
     }
 
@@ -55,7 +55,7 @@ class PRFLRSender {
     private $timers;
     public $socket;
     public $delayedSend = false;
-    public $group;
+    public $source;
     public $thread;
     public $ip;
     public $port;
@@ -87,7 +87,13 @@ class PRFLRSender {
     private function send($timer, $duration, $info = '') {
 
         // format the message
-        $message = join(array($this->thread, $this->group, $timer, $duration, $info), '|');
+        $message = join(array(
+            substr($this->thread, 0, 16),
+            substr($this->source, 0, 16),
+            substr($timer, 0, 48),
+            $duration,
+            substr($info, 0, 16)
+                ), '|');
 
         if ($this->socket) {
             socket_sendto($this->socket, $message, strlen($message), 0, $this->ip, $this->port);
