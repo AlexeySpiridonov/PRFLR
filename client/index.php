@@ -231,6 +231,18 @@
     {
 	return Math.round(value*10000)/10000;
     }
+    function formatNumber(number)
+    {
+        var label = 'ms';
+        if (number > 1000) {
+            label = 'sec';
+            number = number/1000;
+        } else if (number > 10) {
+            number = Math.floor(number);
+        }
+
+        return round(number) + label;
+    }
     function renderDataGrid(selector, checkEmpty)
     {
         var elem = $(selector);
@@ -296,16 +308,16 @@
                     '<tr class="b1">'+
                     '    <td class="r1">' + dd.join(' / ')+'</td>'+
                 (typeof(item.time.current) != 'undefined' ?
-                    '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+item.time.current+'ms</td>' 
+                    '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+formatNumber(item.time.current)+'</td>' 
                 :
                     '    <td class="r2">'+
                     '        <div class="bln" style="width:'+(min > 0 ? round(min*scale) : 1)+'px;"/>'+
                     '        <div class="gln" style="width:'+(avg > 0 ? round(avg*scale) : 1)+'px;"/>'+
                     '        <div class="rln" style="width:'+(max > 0 ? round(max*scale) : 1)+'px;"/>'+
                     '    </td>'+
-                    '    <td class="r3 f12">'+min+'ms<br>'+round(avg)+'ms<br>'+max+'ms</td>'+
+                    '    <td class="r3 f12">'+formatNumber(min)+'<br>'+formatNumber(avg)+'<br>'+formatNumber(max)+'</td>'+
                     '    <td align="right" class="r4 f15">'+
-                    '        '+round(item.time.total)+'ms<br/>'+
+                    '        '+formatNumber(item.time.total)+'<br/>'+
                     '        '+item.count+
                     '    </td>'+
                     '</tr>')+
