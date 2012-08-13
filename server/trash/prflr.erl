@@ -20,11 +20,24 @@ loop(Socket, Conn) ->
         receive
             {udp, Socket, Host, Port, Bin} ->
                 %io:format("Server received:~p~n",[Bin]),
-                mongo:do (safe, master, Conn, prflr, fun() ->  
-                   mongo:insert(timers, makemessage(Bin))
-                end),      
+    
+		try mongosave(Conn, Bin) of
+		    Value ->
+			ok
+		catch
+		    error:_ ->
+			io:format("Error:~p~n",[error])
+		end,
                 loop(Socket, Conn)
 end.
+
+
+mongosave(Conn, Bin) ->
+	spawn( fun() ->
+                mongo:do (safe, master, Conn, prflr, fun() ->  
+                   mongo:insert(timers, makemessage(Bin))
+                end)		
+	end).
 
 
 makemessage(Bin) ->
