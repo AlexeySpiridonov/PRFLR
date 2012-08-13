@@ -3,7 +3,7 @@
 include('./prflr.php');
 
 // configure profiler
-//  // set  profiler server:port  and  set Group for timers 
+//  // set  profiler server:port  and  set Source for timers 
 PRFLR::init('46.4.114.218', '4000', '11msHost');
 
 PRFLR::Begin('checkUDP');
