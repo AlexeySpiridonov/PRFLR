@@ -33,7 +33,7 @@ class dispatcher
         $this->data->remove();
         for ($i = 0; $i < 100000; $i++) {
             $this->data->insert(array(
-                'group' => 'group.' . rand(1, 9),
+                'source' => 'source.' . rand(1, 9),
                 'timer' => 'timer.' . rand(10, 99),
                 'info' => 'info' . rand(1, 9),
                 'thread' => 'somethread' . rand(1000000, 300000000),
@@ -49,7 +49,7 @@ class dispatcher
         if (isset($_GET["filter"])) {
             $par = explode('/', $_GET["filter"]);
             if (isset($par[0]) && $par[0] != '*')
-                $criteria['group'] = new MongoRegex("/" . $par[0] . "/i");
+                $criteria['source'] = new MongoRegex("/" . $par[0] . "/i");
             if (isset($par[1]) && $par[1] != '*')
                 $criteria['timer'] = new MongoRegex("/" . $par[1] . "/i");
             if (isset($par[2]) && $par[2] != '*')
@@ -68,7 +68,7 @@ class dispatcher
             foreach ($gb as $key => $val)
                 $keys[$val] = $key + 1;
         } else {
-            $keys = array("timer" => 1, "group" => 2);
+            $keys = array("timer" => 1, "source" => 2);
         }
         $initial = array("time" => array("min" => (int) 9999999, "max" => 0, "total" => 0), "count" => 0);
         $reduce = "function (obj, prev) {

@@ -92,7 +92,7 @@
                         <a href="#last" class="tabselected">Raw Timers</a>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                         <a href="#agg">Statistic</a>
-                        <!-- | <a href="#slow">SlowTop</a> | <a href="#groups">Groups</a> | <a href="#time">TimeGraph</a>-->
+                        <!-- | <a href="#slow">SlowTop</a> | <a href="#source">Sources</a> | <a href="#time">TimeGraph</a>-->
                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="#settings">Settings</a>
                         
@@ -110,7 +110,7 @@
                         <table border="0" cellpadding="0" cellspacing="0"> 
                             <tr>
                                 <td class='r0 f15'></td>
-                                <td class="r1 f30">Group / Timer / Info / Thread</td>
+                                <td class="r1 f30">Source / Timer / Info / Thread</td>
                                 <td class="r2 f30"></td>
                                 <td class="r3"></td>
                                 <td class="r4 f18">
@@ -154,7 +154,7 @@
                         <table border="0" cellpadding="0" cellspacing="0"> 
                             <tr>
                                 <td class='r0 f15'></td>
-                                <td class="r1 f30">Group / Timer / Info / Thread</td>
+                                <td class="r1 f30">Source / Timer / Info / Thread</td>
                                 <td class="r2 f30">Statistic</td>
                                 <td class="r3"></td>
                                 <td class="r4 f18">
@@ -187,8 +187,8 @@
                                     <div style="padding-right:75px;">
                                         Group By: 
                                         <select style="width:200px;" name="groupby">
-                                            <option value="group,timer">Group + Timer</option>
-                                            <option value="group">Group</option>
+                                            <option value="source,timer">Source + Timer</option>
+                                            <option value="source">Source</option>
                                             <option value="timer">Timer</option>
                                         </select>
                                     </div>
@@ -288,8 +288,8 @@
                 if (typeof(item.time) == 'undefined') return false;
 
                 var dd = [];
-                if (typeof(item.group)  != 'undefined') {
-                    dd.push('<span class="f18">'+item.group+'</span>')
+                if (typeof(item.source)  != 'undefined') {
+                    dd.push('<span class="f18">'+item.source+'</span>')
                 }
                 if (typeof(item.timer)  != 'undefined') {
                     dd.push('<span class="f25">'+item.timer+'</span>')
