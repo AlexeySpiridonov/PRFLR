@@ -100,8 +100,8 @@
                 if (typeof(item.time) == 'undefined') return false;
 
                 var dd = [];
-                if (typeof(item.source)  != 'undefined') {
-                    dd.push('<span class="f18">'+item.source+'</span>')
+                if (typeof(item.src)  != 'undefined') {
+                    dd.push('<span class="f18">'+item.src+'</span>')
                 }
                 if (typeof(item.timer)  != 'undefined') {
                     dd.push('<span class="f25">'+item.timer+'</span>')
@@ -109,8 +109,8 @@
                 if (typeof(item.info)   != 'undefined') {
                     dd.push('<span class="f15">'+item.info+'</span>')
                 }
-                if (typeof(item.thread) != 'undefined') {
-                    dd.push('<span class="f12">'+item.thread+'</span>')
+                if (typeof(item.thrd) != 'undefined') {
+                    dd.push('<span class="f12">'+item.thrd+'</span>')
                 }
                 var min = item.time.min;
                 var avg = item.time.total / item.count;

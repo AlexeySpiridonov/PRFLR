@@ -48,7 +48,7 @@ func initDB() {
 	}
 	c := session.DB(dbName).C(dbCollection)
 	// Insert Test Datas
-	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr", Src: "prflr.test", Time: 1, Info: "test data"})
+	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
 	if err != nil {
 		panic(err)
 	}
@@ -160,14 +160,20 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func initHandler(w http.ResponseWriter, r *http.Request) {
+	initDB()
+}
+
 func main() {
+
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
-	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool magic with favicon! :)  it very important! 
+	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool code for favicon! :)  it's very important! 
 
 	http.HandleFunc("/last/", lastHandler)
+	http.HandleFunc("/init/", initHandler)
 	http.HandleFunc("/aggregate/", aggregateHandler)
 	http.HandleFunc("/", mainHandler)
-	
+
     http.ListenAndServe(":8080", nil)
 }
 
