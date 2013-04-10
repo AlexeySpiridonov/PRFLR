@@ -10,15 +10,15 @@ import (
     "strings"
     //"regexp"
 	"labix.org/v2/mgo"
-    //"labix.org/v2/mgo/bson"
+    "labix.org/v2/mgo/bson"
     "encoding/json"
 )
 
 type Timer struct {
-    Thread string
-    Source string
+    Thrd string
+    Src string
     Timer string
-    Duration float32
+    Time float32
     Info string
 }
 
@@ -35,6 +35,26 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
     t.Execute(w,nil)
 }
 
+func initDB() {
+	session, err := mgo.Dial(dbHosts)
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+	session.SetMode(mgo.Monotonic, true)
+	err = session.DB(dbName).DropDatabase()
+	if err != nil {
+		panic(err)
+	}
+	c := session.DB(dbName).C(dbCollection)
+	// Insert Test Datas
+	err = c.Insert(&Timer{Thrd:"1234567890", Src: "prflr.test", Timer: "prflr", Time: 1, Info: "test data"})
+	if err != nil {
+		panic(err)
+	}
+	session.Close()
+}
+
 /*
  $criteria = array();
         if (isset($_GET["filter"])) {
@@ -49,20 +69,31 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
                 $criteria['thread'] = $par[3];
         }
         return $criteria;
-        */
-func makeCriteria(filter string) {
-	if filter != "" {
+*/
+
+func makeCriteria(filter string) interface{} {
+	if filter != "1" {
 		q := strings.Split(filter, "/")
 		if q[0:] !=nil {
-			//return bson.M{"timer": "test2"}
+			return bson.M{"Timer": "test2"}
 		}
 
 	}
-	return
+	return nil
 }
 
 func makeGroupBy(r *http.Request) {
 	return
+}
+
+func jsonOut(w http.ResponseWriter, r *http.Request, data *[]Timer ) {
+	j, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
+
+	//fmt.Fprintf(w, "%s(%s)", r.FormValue("_"),j)
+	fmt.Fprintf(w, "%s", j)
 }
 
 func lastHandler(w http.ResponseWriter, r *http.Request) {
@@ -77,29 +108,56 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 	
 	// Query All
 	var results []Timer
-	
+
 	//TODO add criteria builder
-	err = dbc.Find( nil ).Sort("-_id").Limit(100).All(&results)
+	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).Sort("-_id").Limit(100).All(&results)
 
 	if err != nil {
 		panic(err)
 	}
 
-	j, err := json.Marshal(results)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Fprintf(w, "%s", j)
+	jsonOut(w, r, &results)
 
     db.Close()
 
 }
 
+/*
+func sortData(sort string) interface[]{
+
+	return nil
+}
+*/
+
 func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO
-	fmt.Fprintf(w, "test = %s", r.FormValue("test") )
-    fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+    db, err := mgo.Dial(dbHosts)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer db.Close()
+    
+    db.SetMode(mgo.Monotonic, true)
+    dbc := db.DB(dbName).C(dbCollection)
+	
+	// Query All
+	var results []Timer
+
+	//var mapreduce  string
+	//var mapreduce = "function (obj, prev) {prev.count++; prev.time.total += obj.time.current; if (prev.time.min > obj.time.current) prev.time.min = obj.time.current; if (prev.time.max < obj.time.current) prev.time.max = obj.time.current; }"
+
+	//TODO add criteria builder
+	//err = dbc.Group(mapreduce).Find( makeCriteria(r.FormValue("filter")) ).All(&results)
+	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).All(&results)
+
+	if err != nil {
+		panic(err)
+	}
+
+	//jsonOut(w, sortData("123") )
+
+    db.Close()
+
 }
 
 func main() {

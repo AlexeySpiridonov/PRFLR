@@ -5,16 +5,17 @@ import (
 	//"io"
 	"log"
 	"net"
+    "strings"
 	"labix.org/v2/mgo"
     //"labix.org/v2/mgo/bson"
 )
 
-type Message struct {
-    thread string
-    source string
-    timer string
-    duration float32
-    info string
+type Timer struct {
+    Thrd string
+    Src string
+    Timer string
+    Time float32
+    Info string
 }
 
 var (
@@ -52,16 +53,17 @@ func main() {
 	}
 }
 
-func prepareMessage(conn net.Conn) (msg Message) {
+func prepareMessage(conn net.Conn) (msg Timer) {
 	//msg := io.Copy(c, c)
-	return Message{"1234567890", "yiiapp", "test.getConnect", 1.456, "info"}
+    strings.Split("123/yiiapp/name/1/nfo", "/")
+	return Timer{"123", "yiiapp", "test.getConnect", 1.456, "info"}
 }
 
 func  saveMessage(dbc *mgo.Collection, conn net.Conn) {
-			dbc.Insert( prepareMessage(conn) )
-        	//if err != nil {
-            //    log.Fatal(err)
-       		// }
+			err:= dbc.Insert( prepareMessage(conn) )
+        	if err != nil {
+                log.Fatal(err)
+       		}
 			// Shut down the connection.
 			conn.Close()
 }
