@@ -12,8 +12,8 @@ import (
 
 type Timer struct {
     Thrd string
-    Src string
     Timer string
+    Src string
     Time float32
     Info string
 }
@@ -55,7 +55,8 @@ func main() {
 
 func prepareMessage(conn net.Conn) (msg Timer) {
 	//msg := io.Copy(c, c)
-    strings.Split("123/yiiapp/name/1/nfo", "/")
+    strings.Split("123|timername|srcname|1|nfo", "|")
+    //TODO  add validator here
 	return Timer{"123", "yiiapp", "test.getConnect", 1.456, "info"}
 }
 

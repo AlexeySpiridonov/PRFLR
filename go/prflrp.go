@@ -16,8 +16,8 @@ import (
 
 type Timer struct {
     Thrd string
-    Src string
     Timer string
+    Src string
     Time float32
     Info string
 }
@@ -48,7 +48,7 @@ func initDB() {
 	}
 	c := session.DB(dbName).C(dbCollection)
 	// Insert Test Datas
-	err = c.Insert(&Timer{Thrd:"1234567890", Src: "prflr.test", Timer: "prflr", Time: 1, Info: "test data"})
+	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr", Src: "prflr.test", Time: 1, Info: "test data"})
 	if err != nil {
 		panic(err)
 	}
@@ -162,9 +162,12 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
+	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool magic with favicon! :)  it very important! 
+
 	http.HandleFunc("/last/", lastHandler)
 	http.HandleFunc("/aggregate/", aggregateHandler)
 	http.HandleFunc("/", mainHandler)
+	
     http.ListenAndServe(":8080", nil)
 }
 
