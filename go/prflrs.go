@@ -19,11 +19,9 @@ type Timer struct {
 }
 
 var (
-    //mgoSession     *mgo.Session
-    dbName = "myDB"
-    dbHosts = "192.168.1.1"
-    dbPort = "1111"
-    dbCollection = "prflr"
+    dbName = "prflr"
+    dbHosts = "127.0.0.1"
+    dbCollection = "timers"
     udpPort = ":5000"
 )
 

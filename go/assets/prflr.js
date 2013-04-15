@@ -34,7 +34,7 @@
                 if (anchor.length > 0) {
                     $('#tab_menu a[href="'+anchor+'"]').click();
                 } else {
-                    $('#tab_menu a[href="#last"]').click();
+                    $('#tab_menu a[href="#aggregate"]').click();
                 }
     }
 
@@ -86,41 +86,43 @@
             // we should get the biggest max value and divide lineBarLength on this value
             var maxMax = 0.000001;
             $.each(data, function(i, item){
-                if (typeof(item.time) == 'undefined')     return false;
-                if (typeof(item.time.max) == 'undefined') return false;
+                if (typeof(item.Time) == 'undefined')     return false;
+                if (typeof(item.Time.max) == 'undefined') return false;
 
-                if (item.time.max > maxMax) {
-                    maxMax = item.time.max;
+                if (item.Time.max > maxMax) {
+                    maxMax = item.Time.max;
                 }
             });
 
             var scale = lineBarLength / maxMax;
             $.each(data, function(i, item){
                 //FIXME  проблема с обработкой массива данных, проверить формат ответа от сервера
-                if (typeof(item.time) == 'undefined') return false;
+                if (typeof(item.Time) == 'undefined') return false;
 
                 var dd = [];
-                if (typeof(item.src)  != 'undefined') {
-                    dd.push('<span class="f18">'+item.src+'</span>')
+                if (typeof(item.Src)  != 'undefined') {
+                    dd.push('<span class="f18">'+item.Src+'</span>')
                 }
-                if (typeof(item.timer)  != 'undefined') {
-                    dd.push('<span class="f25">'+item.timer+'</span>')
+                if (typeof(item.Timer)  != 'undefined') {
+                    dd.push('<span class="f25">'+item.Timer+'</span>')
                 }
-                if (typeof(item.info)   != 'undefined') {
-                    dd.push('<span class="f15">'+item.info+'</span>')
+                if (typeof(item.Info)   != 'undefined') {
+                    dd.push('<span class="f15">'+item.Info+'</span>')
                 }
-                if (typeof(item.thrd) != 'undefined') {
-                    dd.push('<span class="f12">'+item.thrd+'</span>')
+                if (typeof(item.Thrd) != 'undefined') {
+                    dd.push('<span class="f12">'+item.Thrd+'</span>')
                 }
-                var min = item.time.min;
-                var avg = item.time.total / item.count;
-                var max = item.time.max;
+                var min = item.Time.min;
+                var avg = item.Time.total / item.count;
+                var max = item.Time.max;
                 
+
+
                 grid.append(''+
                     '<tr class="b1">'+
                     '    <td class="r1">' + dd.join(' / ')+'</td>'+
-                (typeof(item.time.current) != 'undefined' ?
-                    '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+formatNumber(item.time.current)+'</td>' 
+                (typeof(item.Time) != 'undefined' ?
+                    '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+formatNumber(item.Time)+'</td>' 
                 :
                     '    <td class="r2">'+
                     '        <div class="bln" style="width:'+(min > 0 ? round(min*scale) : 1)+'px;"/>'+
@@ -129,7 +131,7 @@
                     '    </td>'+
                     '    <td class="r3 f12">'+formatNumber(min)+'<br>'+formatNumber(avg)+'<br>'+formatNumber(max)+'</td>'+
                     '    <td align="right" class="r4 f15">'+
-                    '        '+formatNumber(item.time.total)+'<br/>'+
+                    '        '+formatNumber(item.Time.total)+'<br/>'+
                     '        '+item.count+
                     '    </td>'+
                     '</tr>')+

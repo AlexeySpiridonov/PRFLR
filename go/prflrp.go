@@ -22,10 +22,18 @@ type Timer struct {
     Info string
 }
 
+type Stat struct {
+    Src string
+    Timer string
+    Count int
+    Total float32
+    Min float32
+    Max float32
+}
+
 var (
     dbName = "prflr"
     dbHosts = "127.0.0.1"
-    dbPort = "27017"
     dbCollection = "timers"
     udpPort = ":5000"
 )
@@ -86,13 +94,11 @@ func makeGroupBy(r *http.Request) {
 	return
 }
 
-func jsonOut(w http.ResponseWriter, r *http.Request, data *[]Timer ) {
+func jsonOut(w http.ResponseWriter, data *[]struct ) {
 	j, err := json.Marshal(data)
 	if err != nil {
 		panic(err)
 	}
-
-	//fmt.Fprintf(w, "%s(%s)", r.FormValue("_"),j)
 	fmt.Fprintf(w, "%s", j)
 }
 
@@ -107,7 +113,7 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
     dbc := db.DB(dbName).C(dbCollection)
 	
 	// Query All
-	var results []Timer
+	var results []Stat
 
 	//TODO add criteria builder
 	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).Sort("-_id").Limit(100).All(&results)
@@ -116,7 +122,7 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	jsonOut(w, r, &results)
+	jsonOut(w, &results)
 
     db.Close()
 
@@ -162,6 +168,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 
 func initHandler(w http.ResponseWriter, r *http.Request) {
 	initDB()
+	fmt.Fprintf(w, "Cilinder recreated!")
 }
 
 func main() {
@@ -175,6 +182,8 @@ func main() {
 	http.HandleFunc("/", mainHandler)
 
     http.ListenAndServe(":8080", nil)
+
+    //add here UDP aggregator  in  different thread
 }
 
 
