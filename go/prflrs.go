@@ -6,8 +6,10 @@ import (
 	"log"
 	"net"
     "strings"
+//	"fmt"
+	"strconv"
 	"labix.org/v2/mgo"
-    //"labix.org/v2/mgo/bson"
+//  "labix.org/v2/mgo/bson"
 )
 
 type Timer struct {
@@ -26,8 +28,12 @@ var (
 )
 
 func main() {
+	laddr, err := net.ResolveUDPAddr("udp", udpPort); 
+    if err != nil {
+		log.Fatal(err)
+	} 
 
-	l, err := net.Listen("udp", udpPort)
+    l, err := net.ListenUDP("udp", laddr); 
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,28 +48,36 @@ func main() {
     db.SetMode(mgo.Monotonic, true)
     dbc := db.DB(dbName).C(dbCollection)
 
+	var buffer [1500]byte
 	for {
-		conn, err := l.Accept()
+		//conn, err := l.Accept()
+		n, addr, err := l.ReadFromUDP(buffer[0:])
 		if err != nil {
 			log.Fatal(err)
 		}
-		go saveMessage(dbc, conn)
+		go saveMessage(dbc, string(buffer[0:n])+"|"+addr.String())
 	}
 }
 
-func prepareMessage(conn net.Conn) (msg Timer) {
-	//msg := io.Copy(c, c)
-    strings.Split("123|timername|srcname|1|nfo", "|")
+func prepareMessage(msg string) (timer Timer) {
+    fields := strings.Split(msg, "|")
+
+	//fmt.Printf("Fields: %s, %s, %s, %s, %s\n", fields[0], fields[1], fields[2], fields[3], fields[4])
+
     //TODO  add validator here
-	return Timer{"123", "yiiapp", "test.getConnect", 1.456, "info"}
+	//len(fields) == 5, etc.
+
+	time, err := strconv.ParseFloat(fields[3], 32);
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
 }
 
-func  saveMessage(dbc *mgo.Collection, conn net.Conn) {
-			err:= dbc.Insert( prepareMessage(conn) )
-        	if err != nil {
-                log.Fatal(err)
-       		}
-			// Shut down the connection.
-			conn.Close()
+func  saveMessage(dbc *mgo.Collection, msg string) {
+	err:= dbc.Insert(prepareMessage(msg))
+    if err != nil {
+        log.Fatal(err)
+    }
 }
-
