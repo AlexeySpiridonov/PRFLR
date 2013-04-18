@@ -83,7 +83,7 @@ func makeCriteria(filter string) interface{} {
 	if filter != "1" {
 		q := strings.Split(filter, "/")
 		if q[0:] !=nil {
-			return bson.M{"Timer": "test2"}
+			return bson.M{"Timer": "/test2/i"}
 		}
 
 	}
@@ -151,10 +151,10 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 
 	//var mapreduce  string
 	//var mapreduce = "function (obj, prev) {prev.count++; prev.time.total += obj.time.current; if (prev.time.min > obj.time.current) prev.time.min = obj.time.current; if (prev.time.max < obj.time.current) prev.time.max = obj.time.current; }"
-
+	//db.timers.aggregate({$group : { _id : {src:'$src', timer:'$timer'}, "count": { $sum : 1 }, "total":{ $sum:'$time'}, "min" : {$min: '$time'}, "max" : {$max:'$time'} } } )
 	//TODO add criteria builder
 	//err = dbc.Group(mapreduce).Find( makeCriteria(r.FormValue("filter")) ).All(&results)
-	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).All(&results)
+	err = dbc.aggregate( makeCriteria(r.FormValue("filter")) ).All(&results)
 
 	if err != nil {
 		panic(err)
@@ -171,6 +171,29 @@ func initHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Cilinder recreated!")
 }
 
+func prepareMessage(msg string) (timer Timer) {
+    fields := strings.Split(msg, "|")
+
+	//fmt.Printf("Fields: %s, %s, %s, %s, %s\n", fields[0], fields[1], fields[2], fields[3], fields[4])
+
+    //TODO  add validator here
+	//len(fields) == 5, etc.
+
+	time, err := strconv.ParseFloat(fields[3], 32);
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
+}
+
+func  saveMessage(dbc *mgo.Collection, msg string) {
+	err:= dbc.Insert(prepareMessage(msg))
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
 func main() {
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
@@ -184,6 +207,36 @@ func main() {
     http.ListenAndServe(":8080", nil)
 
     //add here UDP aggregator  in  different thread
+    laddr, err := net.ResolveUDPAddr("udp", udpPort); 
+    if err != nil {
+		log.Fatal(err)
+	} 
+
+    l, err := net.ListenUDP("udp", laddr); 
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db, err := mgo.Dial(dbHosts)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer db.Close()
+
+    // Optional. Switch the session to a monotonic behavior.
+    db.SetMode(mgo.Monotonic, true)
+    dbc := db.DB(dbName).C(dbCollection)
+
+	var buffer [1500]byte
+	for {
+		//conn, err := l.Accept()
+		n, addr, err := l.ReadFromUDP(buffer[0:])
+		if err != nil {
+			log.Fatal(err)
+            log.Fatal(addr.String())
+		}
+		go saveMessage(dbc, string(buffer[0:n]))
+	}
 }
 
 
