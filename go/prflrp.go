@@ -32,12 +32,18 @@ type Timer struct {
  * Web panel Struct
  */
 type Stat struct {
+	_id *Gr
     Src string
     Timer string
     Count int
     Total float32
     Min float32
     Max float32
+}
+
+type Gr struct {
+	Src string
+	Timer string
 }
 
 /**
@@ -116,7 +122,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
     defer db.Close()
-    
+
     db.SetMode(mgo.Monotonic, true)
     dbc := db.DB(dbName).C(dbCollection)
 	
@@ -126,10 +132,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	//var mapreduce  string
 	//var mapreduce = "function (obj, prev) {prev.count++; prev.time.total += obj.time.current; if (prev.time.min > obj.time.current) prev.time.min = obj.time.current; if (prev.time.max < obj.time.current) prev.time.max = obj.time.current; }"
 	//db.timers.aggregate({$group : { _id : {src:'$src', timer:'$timer'}, "count": { $sum : 1 }, "total":{ $sum:'$time'}, "min" : {$min: '$time'}, "max" : {$max:'$time'} } } )
-	//TODO add criteria builder
-	//err = dbc.Group(mapreduce).Find( makeCriteria(r.FormValue("filter")) ).All(&results)
-	//err = dbc.aggregate( makeCriteria(r.FormValue("filter")) ).All(&results)
-	err = dbc.Pipe([]bson.M{{"$match": makeCriteria(r.FormValue("filter"))}/*, {"$limit": 1000}*/}).All(&results)
+	err = dbc.Pipe([]bson.M{{"$match": makeCriteria(r.FormValue("filter"))}, {"$limit": 1000}, {"$group": bson.M{"_id": bson.M{"src":"$src", "timer":"$timer"}, "count": bson.M{"$sum":1}, "total":bson.M{"$sum":"$time"}, "min":bson.M{"$min":"$time"}, "max":bson.M{"$max":"$time"}}}}).All(&results)
 
 	if err != nil {
 		panic(err)
@@ -264,5 +267,3 @@ func main() {
 		go saveMessage(dbc, string(buffer[0:n]))
 	}
 }
-
-
