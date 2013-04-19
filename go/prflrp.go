@@ -129,8 +129,16 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	var results []Stat
 
 	//var mapreduce  string
-	//db.timers.aggregate({$group : { _id : {src:'$src', timer:'$timer'}, "count": { $sum : 1 }, "total":{ $sum:'$time'}, "min" : {$min: '$time'}, "max" : {$max:'$time'} } } )
-	err = dbc.Pipe([]bson.M{{"$match": makeCriteria(r.FormValue("filter"))}, {"$limit": 1000}, {"$group": bson.M{"_id": bson.M{"src":"$src", "timer":"$timer"}, "src": bson.M{"$first":"$src"}, "timer": bson.M{"$first":"$timer"}, "count": bson.M{"$sum":1}, "total":bson.M{"$sum":"$time"}, "min":bson.M{"$min":"$time"}, "max":bson.M{"$max":"$time"}}}}).All(&results)
+
+	match := bson.M{"$match": makeCriteria(r.FormValue("filter"))}
+	groupparam := makeGroupBy(r.FormValue("groupby"))
+	//fmt.Println(groupparam)
+	group := bson.M{"$group": bson.M{"_id": groupparam, "src": bson.M{"$first":"$src"}, "timer": bson.M{"$first":"$timer"}, "count": bson.M{"$sum":1}, "total":bson.M{"$sum":"$time"}, "min":bson.M{"$min":"$time"}, "max":bson.M{"$max":"$time"}}}
+	sort  := bson.M{"$sort": bson.M{ r.FormValue("sortby"):-1 }}
+	
+	aggregate := []bson.M{match, {"$limit": 1000}, group, sort }
+
+	err = dbc.Pipe(aggregate).All(&results)
 
 	if err != nil {
 		panic(err)
@@ -183,15 +191,27 @@ func makeCriteria(filter string) interface{} {
 	return c
 }
 
-func makeGroupBy(r *http.Request) {
-	return
+func makeGroupBy(group string) interface{}{
+	q := strings.Split(group, ",")
+	c := make(map[string]interface{})
+	if len(q) >= 1 && q[0] == "src" {
+		c["src"] = "$src"
+	}
+	if len(q) >= 1 && q[1] == "src" {
+		c["src"] = "$src"
+	}	
+	if len(q) >= 1 && q[0] == "timer" {
+		c["timer"] = "$timer"
+	}
+	if len(q) >= 1 && q[1] == "timer" {
+		c["timer"] = "$timer"
+	}	
+	return c
 }
-
-
 
 /* UDP Handlers */
 func  saveMessage(dbc *mgo.Collection, msg string) {
-	err:= dbc.Insert(prepareMessage(msg))
+	err:= dbc.Insert( prepareMessage(msg) )
     if err != nil {
         log.Fatal(err)
     }
