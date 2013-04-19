@@ -37,6 +37,7 @@ type Stat struct {
     Count int
     Total float32
     Min float32
+    Avg float32
     Max float32
 }
 
@@ -129,6 +130,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	grouplist["count"] = bson.M{"$sum":1}
 	grouplist["total"] = bson.M{"$sum":"$time"}
 	grouplist["min"]   = bson.M{"$min":"$time"}
+	grouplist["avg"]   = bson.M{"$avg":"$time"}
 	grouplist["max"]   = bson.M{"$max":"$time"}
 
 	q := strings.Split(r.FormValue("groupby"), ",")
