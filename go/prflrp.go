@@ -182,11 +182,6 @@ func makeCriteria(filter string) interface{} {
 		c["thrd"] = q[3]
 	}
 
-	// debug
-	/*for k, v := range c {
-        fmt.Println("k:", k, "v:", v)
-    }*/
-
 	return c
 }
 
@@ -206,8 +201,6 @@ func  saveMessage(dbc *mgo.Collection, msg string) {
 
 func prepareMessage(msg string) (timer Timer) {
     fields := strings.Split(msg, "|")
-
-	//fmt.Printf("Fields: %s, %s, %s, %s, %s\n", fields[0], fields[1], fields[2], fields[3], fields[4])
 
     //TODO  add validator here
 	//len(fields) == 5, etc.
@@ -259,10 +252,9 @@ func main() {
 	// is Buffer enough?!?!
 	var buffer [1500]byte
 	for {
-		n, addr, err := l.ReadFromUDP(buffer[0:])
+		n, _, err := l.ReadFromUDP(buffer[0:])
 		if err != nil {
 			log.Fatal(err)
-            log.Fatal(addr.String())
 		}
 		go saveMessage(dbc, string(buffer[0:n]))
 	}
