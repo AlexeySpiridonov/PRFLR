@@ -40,11 +40,6 @@ type Stat struct {
     Max float32
 }
 
-type Gr struct {
-	Src string
-	Timer string
-}
-
 /**
  * Global variables
  */
