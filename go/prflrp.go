@@ -128,14 +128,36 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	// Query All
 	var results []Stat
 
-	//var mapreduce  string
+	grouplist := make(map[string]interface{})
+	groupparam := make(map[string]interface{})
 
-	match := bson.M{"$match": makeCriteria(r.FormValue("filter"))}
-	groupparam := makeGroupBy(r.FormValue("groupby"))
-	//fmt.Println(groupparam)
-	group := bson.M{"$group": bson.M{"_id": groupparam, "src": bson.M{"$first":"$src"}, "timer": bson.M{"$first":"$timer"}, "count": bson.M{"$sum":1}, "total":bson.M{"$sum":"$time"}, "min":bson.M{"$min":"$time"}, "max":bson.M{"$max":"$time"}}}
-	sort  := bson.M{"$sort": bson.M{ r.FormValue("sortby"):-1 }}
+	grouplist["count"] = bson.M{"$sum":1}
+	grouplist["total"] = bson.M{"$sum":"$time"}
+	grouplist["min"]   = bson.M{"$min":"$time"}
+	grouplist["max"]   = bson.M{"$max":"$time"}
+
+	q := strings.Split(r.FormValue("groupby"), ",")
 	
+	if len(q) >= 1 && q[0] == "src" {
+		groupparam["src"] = "$src"
+		grouplist["src"]   = bson.M{"$first":"$src"}
+	}
+	if len(q) >= 1 && q[1] == "src" {
+		groupparam["src"] = "$src"
+		grouplist["src"]   = bson.M{"$first":"$src"}
+	}	
+	if len(q) >= 1 && q[0] == "timer" {
+		grouplist["timer"] = bson.M{"$first":"$timer"}
+		groupparam["timer"] = "$timer"
+	}
+	if len(q) >= 1 && q[1] == "timer" {
+		grouplist["timer"] = bson.M{"$first":"$timer"}
+		groupparam["timer"] = "$timer"
+	}	
+	grouplist["_id"] = groupparam
+	group := bson.M{"$group": grouplist}
+	sort  := bson.M{"$sort": bson.M{ r.FormValue("sortby"):-1 }}
+	match := bson.M{"$match": makeCriteria(r.FormValue("filter"))}
 	aggregate := []bson.M{match, {"$limit": 1000}, group, sort }
 
 	err = dbc.Pipe(aggregate).All(&results)
@@ -191,23 +213,6 @@ func makeCriteria(filter string) interface{} {
 	return c
 }
 
-func makeGroupBy(group string) interface{}{
-	q := strings.Split(group, ",")
-	c := make(map[string]interface{})
-	if len(q) >= 1 && q[0] == "src" {
-		c["src"] = "$src"
-	}
-	if len(q) >= 1 && q[1] == "src" {
-		c["src"] = "$src"
-	}	
-	if len(q) >= 1 && q[0] == "timer" {
-		c["timer"] = "$timer"
-	}
-	if len(q) >= 1 && q[1] == "timer" {
-		c["timer"] = "$timer"
-	}	
-	return c
-}
 
 /* UDP Handlers */
 func  saveMessage(dbc *mgo.Collection, msg string) {
