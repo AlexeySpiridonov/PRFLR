@@ -4,16 +4,22 @@ package main
 import (
 	"html/template"
     //"io/ioutil"
+	"net"
     "net/http"
     "fmt"
     "log"
     "strings"
+	"strconv"
     //"regexp"
+	//"fmt"
 	"labix.org/v2/mgo"
     "labix.org/v2/mgo/bson"
     "encoding/json"
 )
 
+/**
+ * UDP Package struct
+ */
 type Timer struct {
     Thrd string
     Timer string
@@ -22,6 +28,9 @@ type Timer struct {
     Info string
 }
 
+/**
+ * Web panel Struct
+ */
 type Stat struct {
     Src string
     Timer string
@@ -31,75 +40,23 @@ type Stat struct {
     Max float32
 }
 
+/**
+ * Global variables
+ */
 var (
     dbName = "prflr"
     dbHosts = "127.0.0.1"
     dbCollection = "timers"
     udpPort = ":5000"
+	httpPort = ":8080"
 )
 
+
+
+/* HTTP Handlers */
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("assets/main.html")
     t.Execute(w,nil)
-}
-
-func initDB() {
-	session, err := mgo.Dial(dbHosts)
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
-	err = session.DB(dbName).DropDatabase()
-	if err != nil {
-		panic(err)
-	}
-	c := session.DB(dbName).C(dbCollection)
-	// Insert Test Datas
-	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
-	if err != nil {
-		panic(err)
-	}
-	session.Close()
-}
-
-/*
- $criteria = array();
-        if (isset($_GET["filter"])) {
-            $par = explode('/', $_GET["filter"]);
-            if (isset($par[0]) && $par[0] != '*')
-                $criteria['source'] = new MongoRegex("/" . $par[0] . "/i");
-            if (isset($par[1]) && $par[1] != '*')
-                $criteria['timer'] = new MongoRegex("/" . $par[1] . "/i");
-            if (isset($par[2]) && $par[2] != '*')
-                $criteria['info'] = new MongoRegex("/" . $par[2] . "/i");
-            if (isset($par[3]) && $par[3] != '*')
-                $criteria['thread'] = $par[3];
-        }
-        return $criteria;
-*/
-
-func makeCriteria(filter string) interface{} {
-	if filter != "1" {
-		q := strings.Split(filter, "/")
-		if q[0:] !=nil {
-			return bson.M{"Timer": "/test2/i"}
-		}
-
-	}
-	return nil
-}
-
-func makeGroupBy(r *http.Request) {
-	return
-}
-
-func jsonOut(w http.ResponseWriter, data *[]struct ) {
-	j, err := json.Marshal(data)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Fprintf(w, "%s", j)
 }
 
 func lastHandler(w http.ResponseWriter, r *http.Request) {
@@ -125,15 +82,32 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 	jsonOut(w, &results)
 
     db.Close()
-
 }
 
-/*
-func sortData(sort string) interface[]{
-
-	return nil
+func initHandler(w http.ResponseWriter, r *http.Request) {
+	initDB()
+	fmt.Fprintf(w, "Cilinder recreated!")
 }
-*/
+
+func initDB() {
+	session, err := mgo.Dial(dbHosts)
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+	session.SetMode(mgo.Monotonic, true)
+	err = session.DB(dbName).DropDatabase()
+	if err != nil {
+		panic(err)
+	}
+	c := session.DB(dbName).C(dbCollection)
+	// Insert Test Datas
+	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
+	if err != nil {
+		panic(err)
+	}
+	session.Close()
+}
 
 func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO
@@ -154,21 +128,78 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	//db.timers.aggregate({$group : { _id : {src:'$src', timer:'$timer'}, "count": { $sum : 1 }, "total":{ $sum:'$time'}, "min" : {$min: '$time'}, "max" : {$max:'$time'} } } )
 	//TODO add criteria builder
 	//err = dbc.Group(mapreduce).Find( makeCriteria(r.FormValue("filter")) ).All(&results)
-	err = dbc.aggregate( makeCriteria(r.FormValue("filter")) ).All(&results)
+	//err = dbc.aggregate( makeCriteria(r.FormValue("filter")) ).All(&results)
+	err = dbc.Pipe([]bson.M{{"$match": makeCriteria(r.FormValue("filter"))}/*, {"$limit": 1000}*/}).All(&results)
 
 	if err != nil {
 		panic(err)
 	}
 
+	jsonOut2(w, &results)
 	//jsonOut(w, sortData("123") )
 
     db.Close()
-
 }
 
-func initHandler(w http.ResponseWriter, r *http.Request) {
-	initDB()
-	fmt.Fprintf(w, "Cilinder recreated!")
+/*
+func sortData(sort string) interface[]{
+
+	return nil
+}
+*/
+
+func jsonOut(w http.ResponseWriter, data *[]Stat) {
+	j, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Fprintf(w, "%s", j)
+}
+func jsonOut2(w http.ResponseWriter, data *[]Timer) {
+	j, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Fprintf(w, "%s", j)
+}
+
+func makeCriteria(filter string) interface{} {
+	q := strings.Split(filter, "/")
+	c := make(map[string]interface{})
+
+	if len(q) >= 1 && q[0] != "" && q[0] != "*" {
+		c["src"]   = &bson.RegEx{Pattern: q[0]}
+	}
+	if len(q) >= 2 && q[1] != "" &&  q[1] != "*" {
+		c["timer"] = &bson.RegEx{Pattern: q[1]}
+	}
+	if len(q) >= 3 && q[2] != "" &&  q[2] != "*" {
+		c["info"]  = &bson.RegEx{Pattern: q[2]}
+	}
+	if len(q) >= 4 && q[3] != "" &&  q[3] != "*" {
+		c["thrd"] = q[3]
+	}
+
+	// debug
+	/*for k, v := range c {
+        fmt.Println("k:", k, "v:", v)
+    }*/
+
+	return c
+}
+
+func makeGroupBy(r *http.Request) {
+	return
+}
+
+
+
+/* UDP Handlers */
+func  saveMessage(dbc *mgo.Collection, msg string) {
+	err:= dbc.Insert(prepareMessage(msg))
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func prepareMessage(msg string) (timer Timer) {
@@ -187,15 +218,9 @@ func prepareMessage(msg string) (timer Timer) {
 	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
 }
 
-func  saveMessage(dbc *mgo.Collection, msg string) {
-	err:= dbc.Insert(prepareMessage(msg))
-    if err != nil {
-        log.Fatal(err)
-    }
-}
-
 func main() {
 
+	/* Starting Web Server */
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool code for favicon! :)  it's very important! 
 
@@ -204,8 +229,9 @@ func main() {
 	http.HandleFunc("/aggregate/", aggregateHandler)
 	http.HandleFunc("/", mainHandler)
 
-    http.ListenAndServe(":8080", nil)
+    http.ListenAndServe(httpPort, nil)
 
+	/* Starting UDP Server */
     //add here UDP aggregator  in  different thread
     laddr, err := net.ResolveUDPAddr("udp", udpPort); 
     if err != nil {
@@ -217,6 +243,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// init Mongo connect
 	db, err := mgo.Dial(dbHosts)
     if err != nil {
         log.Fatal(err)
@@ -227,9 +254,9 @@ func main() {
     db.SetMode(mgo.Monotonic, true)
     dbc := db.DB(dbName).C(dbCollection)
 
+	// is Buffer enough?!?!
 	var buffer [1500]byte
 	for {
-		//conn, err := l.Accept()
 		n, addr, err := l.ReadFromUDP(buffer[0:])
 		if err != nil {
 			log.Fatal(err)
