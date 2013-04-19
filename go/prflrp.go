@@ -70,7 +70,7 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
     dbc := db.DB(dbName).C(dbCollection)
 	
 	// Query All
-	var results []Stat
+	var results []Timer
 
 	//TODO add criteria builder
 	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).Sort("-_id").Limit(100).All(&results)
@@ -79,7 +79,7 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	jsonOut(w, &results)
+	jsonOut2(w, &results)
 
     db.Close()
 }
@@ -121,7 +121,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
     dbc := db.DB(dbName).C(dbCollection)
 	
 	// Query All
-	var results []Timer
+	var results []Stat
 
 	//var mapreduce  string
 	//var mapreduce = "function (obj, prev) {prev.count++; prev.time.total += obj.time.current; if (prev.time.min > obj.time.current) prev.time.min = obj.time.current; if (prev.time.max < obj.time.current) prev.time.max = obj.time.current; }"
@@ -135,8 +135,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	jsonOut2(w, &results)
-	//jsonOut(w, sortData("123") )
+	jsonOut(w, &results)
 
     db.Close()
 }
