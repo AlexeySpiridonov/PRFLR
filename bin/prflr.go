@@ -1,17 +1,14 @@
-//PRFLR web panel
+//PRFLR UDP server and web panel
 package main
 
 import (
 	"html/template"
-    //"io/ioutil"
 	"net"
     "net/http"
     "fmt"
     "log"
     "strings"
 	"strconv"
-    //"regexp"
-	//"fmt"
 	"labix.org/v2/mgo"
     "labix.org/v2/mgo/bson"
     "encoding/json"
@@ -75,9 +72,8 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 
 	//TODO add criteria builder
 	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).Sort("-_id").Limit(100).All(&results)
-
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	jsonOut2(w, &results)
@@ -160,13 +156,6 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
     db.Close()
 }
 
-/*
-func sortData(sort string) interface[]{
-
-	return nil
-}
-*/
-
 func jsonOut(w http.ResponseWriter, data *[]Stat) {
 	j, err := json.Marshal(data)
 	if err != nil {
@@ -198,14 +187,13 @@ func makeCriteria(filter string) interface{} {
 	if len(q) >= 4 && q[3] != "" &&  q[3] != "*" {
 		c["thrd"] = q[3]
 	}
-
 	return c
 }
 
 
 /* UDP Handlers */
 func  saveMessage(dbc *mgo.Collection, msg string) {
-	err:= dbc.Insert( prepareMessage(msg) )
+	err:= dbc.Insert( prepareMessage(msg)  )
     if err != nil {
         log.Fatal(err)
     }
@@ -213,16 +201,11 @@ func  saveMessage(dbc *mgo.Collection, msg string) {
 
 func prepareMessage(msg string) (timer Timer) {
     fields := strings.Split(msg, "|")
-
-    //TODO  add validator here
-	//len(fields) == 5, etc.
-
 	time, err := strconv.ParseFloat(fields[3], 32);
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
+	return Timer{fields[0][0:16], fields[1][0:16], fields[2][0:48], float32(time), fields[4][0:16]}
 }
 
 func main() {
