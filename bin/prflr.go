@@ -149,7 +149,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	group := bson.M{"$group": grouplist}
 	sort  := bson.M{"$sort": bson.M{ r.FormValue("sortby"):-1 }}
 	match := bson.M{"$match": makeCriteria(r.FormValue("filter"))}
-	aggregate := []bson.M{match, {"$limit": 1000}, group, sort }
+	aggregate := []bson.M{match, /*{"$limit": 1000},*/ group, sort }
 
 	err = dbc.Pipe(aggregate).All(&results)
 
