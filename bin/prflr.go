@@ -52,7 +52,6 @@ var (
 )
 
 
-
 /* HTTP Handlers */
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("assets/main.html")
@@ -83,10 +82,6 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
     db.Close()
 }
 
-func initHandler(w http.ResponseWriter, r *http.Request) {
-	initDB()
-	fmt.Fprintf(w, "Cylinder recreated!")
-}
 
 func initDB() {
 	session, err := mgo.Dial(dbHosts)
@@ -149,30 +144,27 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	group := bson.M{"$group": grouplist}
 	sort  := bson.M{"$sort": bson.M{ r.FormValue("sortby"):-1 }}
 	match := bson.M{"$match": makeCriteria(r.FormValue("filter"))}
-	aggregate := []bson.M{match, /*{"$limit": 1000},*/ group, sort }
+	aggregate := []bson.M{match, group, sort}
 
 	err = dbc.Pipe(aggregate).All(&results)
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	jsonOut(w, &results)
+	j, err := json.Marshal(results)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Fprintf(w, "%s", j)
 
     db.Close()
 }
 
-func jsonOut(w http.ResponseWriter, data *[]Stat) {
-	j, err := json.Marshal(data)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Fprintf(w, "%s", j)
-}
 func jsonOut2(w http.ResponseWriter, data *[]Timer) {
 	j, err := json.Marshal(data)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	fmt.Fprintf(w, "%s", j)
 }
@@ -199,7 +191,7 @@ func makeCriteria(filter string) interface{} {
 
 /* UDP Handlers */
 func  saveMessage(dbc *mgo.Collection, msg string) {
-	err:= dbc.Insert( prepareMessage(msg)  )
+	err:= dbc.Insert( prepareMessage(msg) )
     if err != nil {
         log.Fatal(err)
     }
@@ -225,7 +217,6 @@ func main() {
 	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool code for favicon! :)  it's very important! 
 
 	http.HandleFunc("/last/", lastHandler)
-	http.HandleFunc("/init/", initHandler)
 	http.HandleFunc("/aggregate/", aggregateHandler)
 	http.HandleFunc("/", mainHandler)
 
