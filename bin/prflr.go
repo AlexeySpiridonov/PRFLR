@@ -83,7 +83,7 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 
 func initHandler(w http.ResponseWriter, r *http.Request) {
 	initDB()
-	fmt.Fprintf(w, "Cilinder recreated!")
+	fmt.Fprintf(w, "Cylinder recreated!")
 }
 
 func initDB() {
@@ -98,6 +98,11 @@ func initDB() {
 		panic(err)
 	}
 	c := session.DB(dbName).C(dbCollection)
+
+	// creating capped collection
+	// MaxDocs: 300k documents, MaxBytes: 100Mb
+	c.Create(&mgo.CollectionInfo{Capped: true, MaxBytes:100000000, MaxDocs: 300000})
+
 	// Insert Test Datas
 	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
 	if err != nil {
@@ -209,6 +214,9 @@ func prepareMessage(msg string) (timer Timer) {
 }
 
 func main() {
+	
+	// drop old DB, create new capped collection
+	initDB()
 
 	/* Starting Web Server */
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
