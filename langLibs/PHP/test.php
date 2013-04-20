@@ -4,7 +4,7 @@ include('./prflr.php');
 
 // configure profiler
 //  // set  profiler server:port  and  set Source for timers 
-PRFLR::init('46.4.114.218', '4000', '11msHost');
+PRFLR::init('127.0.0.1', '5000', '11msHost');
 
 PRFLR::Begin('checkUDP');
 for ($i = 0; $i < 100000; $i++) {

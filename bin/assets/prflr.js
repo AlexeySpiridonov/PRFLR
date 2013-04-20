@@ -1,143 +1,201 @@
-    function start(){ 
-                $.ajaxSetup({cache: false}); // turn off ajax cache
+function start(){ 
+	$.ajaxSetup({cache: false}); // turn off ajax cache
+	
+	// Menu Item Handlers
+	$('#tab_menu a').click(function(){
+	    if (inProgress) {
+	        return false;
+	    }
+	
+	    var filter = $('.profiler_block:visible').find('input[name=filter]').val();
+	    filter     = typeof(filter) != 'undefined' && filter.length > 0 ? filter : '*/*/*/*';
+	
+	    $('.profiler_block :input').unbind();
+	    $('.profiler_block').hide();
+	    var selector = $(this).attr('href');
+	    $(selector).show();
+	    $(selector).find('input[name=filter]').val(filter);
+	    $(selector+' :input').not('input[name="filter"]').change(function(e){
+	        renderDataGrid(selector);
+	    });
+	    $(selector+' .refresh_button').click(function(){
+	        renderDataGrid(selector);
+	    });
+	    
+	    renderDataGrid(selector, false);
+	
+	    $('#tab_menu a').removeClass('tabselected');
+	    $(this).addClass('tabselected');
+	    
+	    return false;
+	});
+	
+	// URL anchor handlers
+	var anchor = window.location.hash;
+	if (anchor.length > 0) {
+	    $('#tab_menu a[href="'+anchor+'"]').click();
+	} else {
+	    $('#tab_menu a[href="#aggregate"]').click();
+	}
+}
 
-                $('#tab_menu a').click(function(){
-                    if (inProgress) {
-                        return false;
-                    }
+// Row items click handlers
+function initProfilerItemsClickHandler()
+{
+	$(".prfrlItem").hover(function(){
+		$(this).parent().parent().css('background-color', 'white');
+	});
+	
+	$(".prfrlItem").click(function(event){
+		var item  = $(this).attr("item");
+		var value = $(this).text();
 
-                    var filter = $('.profiler_block:visible').find('input[name=filter]').val();
-                    filter     = typeof(filter) != 'undefined' && filter.length > 0 ? filter : '*/*/*/*';
+		var filter = '';
+		switch (item) {
+			case 'src':
+				filter = value+"/*/*/*";
+				break;
+			case 'timer':
+				filter = "*/"+value+"/*/*";
+				break;
+			case 'info':
+				filter = "*/*/"+value+"/*";
+				break;
+			case 'thrd':
+				filter = "*/*/*/"+value;
+				break;
+			default:
+				return false;
+				break;
+		}
 
-                    $('.profiler_block :input').unbind();
-                    $('.profiler_block').hide();
-                    var selector = $(this).attr('href');
-                    $(selector).show();
-                    $(selector).find('input[name=filter]').val(filter);
-                    $(selector+' :input').not('input[name="filter"]').change(function(e){
-                        renderDataGrid(selector);
-                    });
-                    $(selector+' .refresh_button').click(function(){
-                        renderDataGrid(selector);
-                    });
-                    //renderDataGrid(selector, true);
-                    renderDataGrid(selector, false);
+		var selector = $(".tabselected").attr('href');
+		$(selector).find('input[name=filter]').val(filter);
+		
+		event.stopPropagation();
+		
+		renderDataGrid(selector);
+	});
+}
+// Row click handlers
+function initProfilerRowClickHandler()
+{
+	$(".prflrRow").click(function(){
+		var filter = [];
+		$(this).find(".prfrlItem").each(function(){
+			filter.push($(this).text());
+		});
+		
+		var selector = $(".tabselected").attr('href');
+		
+		$(selector).find('input[name=filter]').val(filter.join("/"));
+		renderDataGrid(selector);
+	});
+}
 
-                    // @TODO   add  .tabselected  to clicked tab
-                    $('#tab_menu a').removeClass('tabselected');
-                    $(this).addClass('tabselected');
-                    
-                    return false;
-                });
+function round(value)
+{
+	return Math.round(value*100)/100;
+}
 
-                var anchor = window.location.hash;
-                if (anchor.length > 0) {
-                    $('#tab_menu a[href="'+anchor+'"]').click();
-                } else {
-                    $('#tab_menu a[href="#aggregate"]').click();
-                }
+function formatNumber(number)
+{
+    var label = 'ms';
+    if (number > 1000) {
+        label = 'sec';
+        number = number/1000;
+    } else if (number > 10) {
+        number = Math.floor(number);
+    }
+    return round(number) + label;
+}
+
+function renderDataGrid(selector, checkEmpty)
+{
+    var elem = $(selector);
+    var grid = elem.find('table.profiler_grid');
+    var button = elem.find('.refresh_button');
+    var query  = "/" + elem.attr('id') + "/?" + elem.find(':input').serialize();
+
+    if (grid.length == 0) {
+        return false;
     }
 
-    function round(value)
-    {
-		return Math.round(value*100)/100;
+    if (typeof(checkEmpty) == 'undefined') {
+        checkEmpty = false;
+    }
+    if (checkEmpty && grid.html().length > 0) {
+        return false;
     }
 
-    function formatNumber(number)
-    {
-        var label = 'ms';
-        if (number > 1000) {
-            label = 'sec';
-            number = number/1000;
-        } else if (number > 10) {
-            number = Math.floor(number);
-        }
-        return round(number) + label;
-    }
+    inProgress = true; // set to true (C.O.)  (^_^)
+    elem.find(':input').attr('disabled', 'disabled');
 
-    function renderDataGrid(selector, checkEmpty)
-    {
-        var elem = $(selector);
-        var grid = elem.find('table.profiler_grid');
-        var button = elem.find('.refresh_button');
-        var query  = "/" + elem.attr('id') + "/?" + elem.find(':input').serialize();
+    grid.css('opacity', 0.3);
+    button.css('color', 'grey').html('Loading...');
+    $.getJSON(query, function(data){
+        grid.empty().append('<tr class="b1"><td colspan="5">&nbsp;</td></tr>');
 
-        if (grid.length == 0) {
-            return false;
-        }
+        if (data == null) return false;
+        // first calculate line bars scale
+        // we should get the biggest max value and divide lineBarLength on this value
+        var maxMax = 0.000001;
+        $.each(data, function(i, item){
+            if (typeof(item.Max) == 'undefined') return false;
 
-        if (typeof(checkEmpty) == 'undefined') {
-            checkEmpty = false;
-        }
-        if (checkEmpty && grid.html().length > 0) {
-            return false;
-        }
-
-        inProgress = true; // set to true (C.O.)  (^_^)
-        elem.find(':input').attr('disabled', 'disabled');
-
-        grid.css('opacity', 0.3);
-        button.css('color', 'grey').html('Loading...');
-        $.getJSON(query, function(data){
-            grid.empty().append('<tr class="b1"><td colspan="5">&nbsp;</td></tr>');
-
-            if (data == null) return false;
-            // first calculate line bars scale
-            // we should get the biggest max value and divide lineBarLength on this value
-            var maxMax = 0.000001;
-            $.each(data, function(i, item){
-                //if (typeof(item.Time) == 'undefined')     return false;
-                if (typeof(item.Max) == 'undefined') return false;
-
-                if (item.Max > maxMax) {
-                    maxMax = item.Max;
-                }
-            });
-
-            var scale = lineBarLength / maxMax;
-            $.each(data, function(i, item){
-                var dd = [];
-                if (typeof(item.Src) != 'undefined' && item.Src != '') {
-                    dd.push('<span class="f18">'+item.Src+'</span>')
-                }
-                if (typeof(item.Timer) != 'undefined' && item.Timer != '') {
-                    dd.push('<span class="f25">'+item.Timer+'</span>')
-                }
-                if (typeof(item.Info) != 'undefined' && item.Info != '') {
-                    dd.push('<span class="f15">'+item.Info+'</span>')
-                }
-                if (typeof(item.Thrd)  != 'undefined' && item.Thrd != '') {
-                    dd.push('<span class="f12">'+item.Thrd+'</span>')
-                }
-				var min = item.Min;
-                var avg = item.Total / item.Count;
-                var max = item.Max;
-
-                grid.append(''+
-                    '<tr class="b1">'+
-                    '    <td class="r1">' + dd.join(' / ')+'</td>'+
-                (typeof(item.Time) != 'undefined' ?
-                    '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+formatNumber(item.Time)+'</td>' 
-                :
-                    '    <td class="r2">'+
-                    '        <div class="bln" style="width:'+(min > 0 ? round(min*scale) : 1)+'px;"/>'+
-                    '        <div class="gln" style="width:'+(avg > 0 ? round(avg*scale) : 1)+'px;"/>'+
-                    '        <div class="rln" style="width:'+(max > 0 ? round(max*scale) : 1)+'px;"/>'+
-                    '    </td>'+
-                    '    <td class="r3 f12">'+formatNumber(min)+'<br>'+formatNumber(avg)+'<br>'+formatNumber(max)+'</td>'+
-                    '    <td align="right" class="r4 f15">'+
-                    '        '+formatNumber(item.Total)+'<br/>'+
-                    '        '+item.Count+
-                    '    </td>')+
-                    '</tr>'+
-                    '');
-            });
-        }).complete(function(){
-            grid.css('opacity', 1);
-            button.css('color', 'black').html('Refresh');
-            elem.find(':input').attr('disabled', null);
-
-            inProgress = false;
+            if (item.Max > maxMax) {
+                maxMax = item.Max;
+            }
         });
-    }
+
+        var scale = lineBarLength / maxMax;
+        $.each(data, function(i, item){
+            var dd = [];
+            if (typeof(item.Src) != 'undefined' && item.Src != '') {
+                dd.push('<span class="f18 prfrlItem" item="src">'+item.Src+'</span>')
+            }
+            if (typeof(item.Timer) != 'undefined' && item.Timer != '') {
+                dd.push('<span class="f25 prfrlItem" item="timer">'+item.Timer+'</span>')
+            }
+            if (typeof(item.Info) != 'undefined' && item.Info != '') {
+                dd.push('<span class="f15 prfrlItem" item="info">'+item.Info+'</span>')
+            }
+            if (typeof(item.Thrd)  != 'undefined' && item.Thrd != '') {
+                dd.push('<span class="f12 prfrlItem" item="thrd">'+item.Thrd+'</span>')
+            }
+
+			var min = item.Min;
+            var avg = item.Total / item.Count;
+            var max = item.Max;
+
+            grid.append(''+
+                '<tr class="b1 prflrRow">'+
+                '    <td class="r1">' + dd.join(' / ')+'</td>'+
+            (typeof(item.Time) != 'undefined' ?
+                '    <td class="r2"></td><td class="r3 f12">&nbsp;<br>&nbsp;<br>&nbsp;</td><td align="right" class="r4 f15">'+formatNumber(item.Time)+'</td>' 
+            :
+                '    <td class="r2">'+
+                '        <div class="bln" style="width:'+(min > 0 ? round(min*scale) : 1)+'px;"/>'+
+                '        <div class="gln" style="width:'+(avg > 0 ? round(avg*scale) : 1)+'px;"/>'+
+                '        <div class="rln" style="width:'+(max > 0 ? round(max*scale) : 1)+'px;"/>'+
+                '    </td>'+
+                '    <td class="r3 f12">'+formatNumber(min)+'<br>'+formatNumber(avg)+'<br>'+formatNumber(max)+'</td>'+
+                '    <td align="right" class="r4 f15">'+
+                '        '+formatNumber(item.Total)+'<br/>'+
+                '        '+item.Count+
+                '    </td>')+
+                '</tr>'+
+                '');
+        });
+    }).complete(function(){
+        grid.css('opacity', 1);
+        button.css('color', 'black').html('Refresh');
+        elem.find(':input').attr('disabled', null);
+
+		initProfilerItemsClickHandler();
+		initProfilerRowClickHandler();
+
+        inProgress = false;
+    });
+}
 
