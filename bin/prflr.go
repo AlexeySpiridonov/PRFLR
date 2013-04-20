@@ -139,7 +139,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 		groupparam["src"] = "$src"
 		grouplist["src"]   = bson.M{"$first":"$src"}
 	}
-	if len(q) >= 1 && q[1] == "timer" {
+	if len(q) >= 2 && q[1] == "timer" {
 		grouplist["timer"] = bson.M{"$first":"$timer"}
 		groupparam["timer"] = "$timer"
 	}	
