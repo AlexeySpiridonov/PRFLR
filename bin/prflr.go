@@ -45,8 +45,10 @@ var (
     dbName = "prflr"
     dbHosts = "127.0.0.1"
     dbCollection = "timers"
-    udpPort = ":5000"
+    udpPort = ":4000"
 	httpPort = ":8080"
+	cappedCollectionMaxByte = 100000000 // 100Mb
+	cappedCollectionMaxDocs = 300000 // 300k
 )
 
 
@@ -100,8 +102,7 @@ func initDB() {
 	c := session.DB(dbName).C(dbCollection)
 
 	// creating capped collection
-	// MaxDocs: 300k documents, MaxBytes: 100Mb
-	c.Create(&mgo.CollectionInfo{Capped: true, MaxBytes:100000000, MaxDocs: 300000})
+	c.Create(&mgo.CollectionInfo{Capped: true, MaxBytes: cappedCollectionMaxByte, MaxDocs: cappedCollectionMaxDocs})
 
 	// Insert Test Datas
 	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
