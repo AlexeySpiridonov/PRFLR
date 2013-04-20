@@ -19,8 +19,8 @@ import (
  */
 type Timer struct {
     Thrd string
-    Timer string
     Src string
+	Timer string
     Time float32
     Info string
 }
@@ -211,7 +211,8 @@ func prepareMessage(msg string) (timer Timer) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return Timer{fields[0][0:16], fields[1][0:16], fields[2][0:48], float32(time), fields[4][0:16]}
+	//return Timer{fields[0][0:16], fields[1][0:16], fields[2][0:48], float32(time), fields[4][0:16]}
+	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
 }
 
 func main() {
