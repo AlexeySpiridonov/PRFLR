@@ -3,7 +3,7 @@ package main
 
 import (
 	"net"
-    "fmt"
+//    "fmt"
     "log"
     "strings"
 	"strconv"
@@ -41,7 +41,7 @@ func  saveMessage(dbc *mgo.Collection, msg string) {
 
 func prepareMessage(msg string) (timer Timer) {
     fields := strings.Split(msg, "|")
-	fmt.Println(fields)
+//	fmt.Println(fields)
 	time, err := strconv.ParseFloat(fields[3], 32);
 	if err != nil {
 		log.Fatal(err)
