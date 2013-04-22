@@ -6,14 +6,15 @@ function start(){
 	    if (inProgress) {
 	        return false;
 	    }
-	
-	    var filter = $('.profiler_block:visible').find('input[name=filter]').val();
-	    filter     = typeof(filter) != 'undefined' && filter.length > 0 ? filter : '*/*/*/*';
-	
+
 	    $('.profiler_block :input').unbind();
 	    $('.profiler_block').hide();
 	    var selector = $(this).attr('href');
 	    $(selector).show();
+
+		var filter = $('.profiler_block:visible').find('input[name=filter]').val();
+	    filter     = typeof(filter) != 'undefined' && filter.length > 0 ? filter : '*/*/*/*';
+
 	    $(selector).find('input[name=filter]').val(filter);
 	    $(selector+' :input').not('input[name="filter"]').change(function(e){
 	        renderDataGrid(selector);
@@ -21,76 +22,88 @@ function start(){
 	    $(selector+' .refresh_button').click(function(){
 	        renderDataGrid(selector);
 	    });
-	    
-	    renderDataGrid(selector, false);
 	
 	    $('#tab_menu a').removeClass('tabselected');
 	    $(this).addClass('tabselected');
+		
+		renderDataGrid(selector, false);
 	    
 	    return false;
 	});
-	
+
 	// URL anchor handlers
-	var anchor = window.location.hash;
-	if (anchor.length > 0) {
-	    $('#tab_menu a[href="'+anchor+'"]').click();
+	var hash = window.location.hash.replace('#', '');
+	if (hash.length > 0) {
+		hash = hash.split("|");
+
+		if (typeof(hash[1]) == 'undefined') {
+			hash[1] = 'aggregate';
+		}
+
+		$('input[name=filter]').val(hash[0]);
+	    $('#tab_menu a[href="#'+hash[1]+'"]').click();
 	} else {
 	    $('#tab_menu a[href="#aggregate"]').click();
 	}
+
+	$('.prflrItemHeader').click(function(){
+		assignFilterChunkValue($(this).attr('item'), '*');
+		renderDataGrid(getCurrentMenuSelector());
+	});
+
+	$('.resetFilter').click(function(){
+		assignFilterChunkValue('*', '*');
+		renderDataGrid(getCurrentMenuSelector());
+	});
 }
 
 // Row items click handlers
 function initProfilerItemsClickHandler()
 {
-	$(".prfrlItem").hover(function(){
-		$(this).parent().parent().css('background-color', 'white');
-	});
-	
 	$(".prfrlItem").click(function(event){
 		var item  = $(this).attr("item");
 		var value = $(this).text();
 
-		var filter = '';
-		switch (item) {
-			case 'src':
-				filter = value+"/*/*/*";
-				break;
-			case 'timer':
-				filter = "*/"+value+"/*/*";
-				break;
-			case 'info':
-				filter = "*/*/"+value+"/*";
-				break;
-			case 'thrd':
-				filter = "*/*/*/"+value;
-				break;
-			default:
-				return false;
-				break;
-		}
+		assignFilterChunkValue(item, value);
 
-		var selector = $(".tabselected").attr('href');
-		$(selector).find('input[name=filter]').val(filter);
-		
+		var selector = getCurrentMenuSelector();
+
 		event.stopPropagation();
-		
+
 		renderDataGrid(selector);
 	});
 }
-// Row click handlers
-function initProfilerRowClickHandler()
+
+function assignFilterChunkValue(chunk, value)
 {
-	$(".prflrRow").click(function(){
-		var filter = [];
-		$(this).find(".prfrlItem").each(function(){
-			filter.push($(this).text());
-		});
-		
-		var selector = $(".tabselected").attr('href');
-		
-		$(selector).find('input[name=filter]').val(filter.join("/"));
-		renderDataGrid(selector);
-	});
+	var filter = $('input[name=filter]:visible');
+
+	if (chunk == '*') {
+		filter.val(value+'/'+value+'/'+value+'/'+value);
+		return true;
+	}
+
+	var chunkToSlot = {
+		"src":   0,
+		"timer": 1,
+		"info":  2,
+		"thrd":  3
+	};
+
+	if (typeof(chunkToSlot[chunk]) == 'undefined') {
+		return false;
+	}
+
+	var chunks = filter.val().split('/');
+
+	chunks[chunkToSlot[chunk]] = value;
+
+	filter.val(chunks.join('/'));
+}
+
+function getCurrentMenuSelector()
+{
+	return $(".tabselected").attr('href');
 }
 
 function round(value)
@@ -116,6 +129,9 @@ function renderDataGrid(selector, checkEmpty)
     var grid = elem.find('table.profiler_grid');
     var button = elem.find('.refresh_button');
     var query  = "/" + elem.attr('id') + "/?" + elem.find(':input').serialize();
+
+	var filter = $('input[name=filter]:visible').val();
+	window.location.hash = "#"+filter+"|"+getCurrentMenuSelector().replace("#", '');
 
     if (grid.length == 0) {
         return false;
@@ -193,7 +209,6 @@ function renderDataGrid(selector, checkEmpty)
         elem.find(':input').attr('disabled', null);
 
 		initProfilerItemsClickHandler();
-		initProfilerRowClickHandler();
 
         inProgress = false;
     });

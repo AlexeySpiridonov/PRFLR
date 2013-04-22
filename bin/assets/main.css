@@ -1,4 +1,4 @@
-tr.prflrRow:hover {/*background-color: #fef;*/ cursor: pointer;}
+/*tr.prflrRow:hover {background-color: #fef; cursor: pointer;}*/
 .b1 td {border-bottom:1px solid #808080;}
 
 .profiler_block {display: none;padding-bottom:50px}
@@ -30,3 +30,7 @@ tr.prflrRow:hover {/*background-color: #fef;*/ cursor: pointer;}
 .f35 {font-size:35px;}
 
 .prfrlItem:hover {/*color: blue;*/ text-decoration: underline; cursor: pointer}
+
+.resetFilter {cursor:pointer}
+
+.prflrItemHeader:hover {text-decoration: underline; cursor: pointer}
