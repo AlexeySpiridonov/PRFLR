@@ -196,6 +196,8 @@ func  saveMessage(dbc *mgo.Collection, msg string) {
 
 func  prepareMessage(msg string) (timer Timer) {
     fields := strings.Split(msg, "|")
+	//fmt.Println(fields)
+
 	time, err := strconv.ParseFloat(fields[3], 32);
 	if err != nil {
 		log.Fatal(err)
@@ -215,7 +217,9 @@ func main() {
 	http.HandleFunc("/last/", lastHandler)
 	http.HandleFunc("/aggregate/", aggregateHandler)
 	http.HandleFunc("/", mainHandler)
-    http.ListenAndServe(httpPort, nil)
+
+
+	go http.ListenAndServe(httpPort, nil)
 
 	/* Starting UDP Server */
     //add here UDP aggregator  in  different thread
