@@ -77,21 +77,21 @@ class PRFLRSender {
         if (!isset($this->timers[$timer]))
             return false;
 
-        $delay = round(( microtime(true) - $this->timers[$timer] ) * 1000, 3);
+        $time = round(( microtime(true) - $this->timers[$timer] ) * 1000, 3);
 
-        $this->send($timer, $delay, $info);
+        $this->send($timer, $time, $info);
 
         unset($this->timers[$timer]);
     }
 
-    private function send($timer, $duration, $info = '') {
+    private function send($timer, $time, $info = '') {
 
         // format the message
         $message = join(array(
             substr($this->thread, 0, 16),
             substr($this->source, 0, 16),
             substr($timer, 0, 48),
-            $duration,
+            $time,
             substr($info, 0, 16)
                 ), '|');
 
