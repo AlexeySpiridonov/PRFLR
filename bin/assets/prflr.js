@@ -22,12 +22,12 @@ function start(){
 	    $(selector+' .refresh_button').click(function(){
 	        renderDataGrid(selector);
 	    });
-	
+
 	    $('#tab_menu a').removeClass('tabselected');
 	    $(this).addClass('tabselected');
-		
+
 		renderDataGrid(selector, false);
-	    
+
 	    return false;
 	});
 
@@ -76,7 +76,7 @@ function initProfilerItemsClickHandler()
 
 function assignFilterChunkValue(chunk, value)
 {
-	var filter = $('input[name=filter]:visible');
+	var filter = $('input[name=filter]');
 
 	if (chunk == '*') {
 		filter.val(value+'/'+value+'/'+value+'/'+value);
@@ -94,7 +94,7 @@ function assignFilterChunkValue(chunk, value)
 		return false;
 	}
 
-	var chunks = filter.val().split('/');
+	var chunks = $('input[name=filter]:visible').val().split('/');
 
 	chunks[chunkToSlot[chunk]] = value;
 
