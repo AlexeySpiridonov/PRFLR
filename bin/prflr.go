@@ -64,10 +64,10 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
     defer db.Close()
-    
+
     db.SetMode(mgo.Monotonic, true)
     dbc := db.DB(dbName).C(dbCollection)
-	
+
 	// Query All
 	var results []Timer
 
@@ -77,7 +77,11 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	jsonOut2(w, &results)
+	j, err := json.Marshal(&results)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Fprintf(w, "%s", j)
 
     db.Close()
 }
@@ -117,7 +121,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 
     db.SetMode(mgo.Monotonic, true)
     dbc := db.DB(dbName).C(dbCollection)
-	
+
 	// Query All
 	var results []Stat
 
@@ -131,7 +135,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	grouplist["max"]   = bson.M{"$max":"$time"}
 
 	q := strings.Split(r.FormValue("groupby"), ",")
-	
+
 	if len(q) >= 1 && q[0] == "src" {
 		groupparam["src"] = "$src"
 		grouplist["src"]   = bson.M{"$first":"$src"}
@@ -139,7 +143,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	if len(q) >= 2 && q[1] == "timer" {
 		grouplist["timer"] = bson.M{"$first":"$timer"}
 		groupparam["timer"] = "$timer"
-	}	
+	}
 	grouplist["_id"] = groupparam
 	group := bson.M{"$group": grouplist}
 	sort  := bson.M{"$sort": bson.M{ r.FormValue("sortby"):-1 }}
@@ -161,13 +165,6 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
     db.Close()
 }
 
-func jsonOut2(w http.ResponseWriter, data *[]Timer) {
-	j, err := json.Marshal(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Fprintf(w, "%s", j)
-}
 
 func makeCriteria(filter string) interface{} {
 	q := strings.Split(filter, "/")
@@ -197,7 +194,7 @@ func  saveMessage(dbc *mgo.Collection, msg string) {
     }
 }
 
-func prepareMessage(msg string) (timer Timer) {
+func  prepareMessage(msg string) (timer Timer) {
     fields := strings.Split(msg, "|")
 	time, err := strconv.ParseFloat(fields[3], 32);
 	if err != nil {
@@ -208,28 +205,26 @@ func prepareMessage(msg string) (timer Timer) {
 }
 
 func main() {
-	
+
 	// drop old DB, create new capped collection
 	initDB()
 
 	/* Starting Web Server */
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
-	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool code for favicon! :)  it's very important! 
-
+	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets")))  //cool code for favicon! :)  it's very important!
 	http.HandleFunc("/last/", lastHandler)
 	http.HandleFunc("/aggregate/", aggregateHandler)
 	http.HandleFunc("/", mainHandler)
-
     http.ListenAndServe(httpPort, nil)
 
 	/* Starting UDP Server */
     //add here UDP aggregator  in  different thread
-    laddr, err := net.ResolveUDPAddr("udp", udpPort); 
+    laddr, err := net.ResolveUDPAddr("udp", udpPort);
     if err != nil {
 		log.Fatal(err)
-	} 
+	}
 
-    l, err := net.ListenUDP("udp", laddr); 
+    l, err := net.ListenUDP("udp", laddr);
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -246,7 +241,7 @@ func main() {
     dbc := db.DB(dbName).C(dbCollection)
 
 	// is Buffer enough?!?!
-	var buffer [1500]byte
+	var buffer [500]byte
 	for {
 		n, _, err := l.ReadFromUDP(buffer[0:])
 		if err != nil {
