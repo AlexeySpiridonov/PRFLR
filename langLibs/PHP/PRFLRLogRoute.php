@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief Pinba log router
+ * @brief PRFLR log router
  * @note following options should be enabled in config
  *     Yii::getLogger()->autoFlush = 1;
  *     Yii::getLogger()->autoDump = 1;
