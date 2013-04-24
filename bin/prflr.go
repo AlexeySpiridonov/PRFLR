@@ -144,13 +144,13 @@ func makeCriteria(filter string) interface{} {
 	c := make(map[string]interface{})
 
 	if len(q) >= 1 && q[0] != "" && q[0] != "*" {
-		c["src"] = &bson.RegEx{Pattern: q[0]}
+		c["src"] = &bson.RegEx{q[0], "i"}
 	}
 	if len(q) >= 2 && q[1] != "" && q[1] != "*" {
-		c["timer"] = &bson.RegEx{Pattern: q[1]}
+		c["timer"] = &bson.RegEx{q[1], "i"}
 	}
 	if len(q) >= 3 && q[2] != "" && q[2] != "*" {
-		c["info"] = &bson.RegEx{Pattern: q[2]}
+		c["info"] = &bson.RegEx{q[2], "i"}
 	}
 	if len(q) >= 4 && q[3] != "" && q[3] != "*" {
 		c["thrd"] = q[3]
@@ -168,10 +168,13 @@ func saveMessage(dbc *mgo.Collection, msg string) {
 
 func prepareMessage(msg string) (timer Timer) {
 	fields := strings.Split(msg, "|")
+	//fmt.Println(fields)
+
 	time, err := strconv.ParseFloat(fields[3], 32)
 	if err != nil {
 		log.Panic(err)
 	}
+	//return Timer{fields[0][0:16], fields[1][0:16], fields[2][0:48], float32(time), fields[4][0:16]}
 	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
 }
 
