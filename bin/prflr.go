@@ -61,7 +61,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 func lastHandler(w http.ResponseWriter, r *http.Request) {
 	db, err := mgo.Dial(dbHosts)
     if err != nil {
-        log.Fatal(err)
+        log.Panic(err)
     }
     defer db.Close()
 
@@ -74,12 +74,12 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO add criteria builder
 	err = dbc.Find( makeCriteria(r.FormValue("filter")) ).Sort("-_id").Limit(100).All(&results)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	j, err := json.Marshal(&results)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	fmt.Fprintf(w, "%s", j)
 
@@ -90,13 +90,13 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 func initDB() {
 	session, err := mgo.Dial(dbHosts)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 	err = session.DB(dbName).DropDatabase()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	c := session.DB(dbName).C(dbCollection)
 
@@ -106,7 +106,7 @@ func initDB() {
 	// Insert Test Datas
 	err = c.Insert(&Timer{Thrd:"1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	session.Close()
 }
@@ -115,7 +115,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO
     db, err := mgo.Dial(dbHosts)
     if err != nil {
-        log.Fatal(err)
+        log.Panic(err)
     }
     defer db.Close()
 
@@ -153,7 +153,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	err = dbc.Pipe(aggregate).All(&results)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	j, err := json.Marshal(results)
@@ -190,7 +190,7 @@ func makeCriteria(filter string) interface{} {
 func  saveMessage(dbc *mgo.Collection, msg string) {
 	err:= dbc.Insert( prepareMessage(msg) )
     if err != nil {
-        log.Fatal(err)
+        log.Panic(err)
     }
 }
 
@@ -200,7 +200,7 @@ func  prepareMessage(msg string) (timer Timer) {
 
 	time, err := strconv.ParseFloat(fields[3], 32);
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	//return Timer{fields[0][0:16], fields[1][0:16], fields[2][0:48], float32(time), fields[4][0:16]}
 	return Timer{fields[0], fields[1], fields[2], float32(time), fields[4]}
@@ -249,7 +249,7 @@ func main() {
 	for {
 		n, _, err := l.ReadFromUDP(buffer[0:])
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 		go saveMessage(dbc, string(buffer[0:n]))
 	}
