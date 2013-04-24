@@ -48,7 +48,7 @@ var (
 	udpPort                 = ":4000"
 	httpPort                = ":8080"
 	cappedCollectionMaxByte = 100000000 // 100Mb
-	cappedCollectionMaxDocs = 300000    // 300k
+	cappedCollectionMaxDocs = 500000    // 500k
 )
 
 /* HTTP Handlers */
@@ -83,30 +83,6 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", j)
 
 	db.Close()
-}
-
-func initDB() {
-	session, err := mgo.Dial(dbHosts)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
-	err = session.DB(dbName).DropDatabase()
-	if err != nil {
-		log.Fatal(err)
-	}
-	c := session.DB(dbName).C(dbCollection)
-
-	// creating capped collection
-	c.Create(&mgo.CollectionInfo{Capped: true, MaxBytes: cappedCollectionMaxByte, MaxDocs: cappedCollectionMaxDocs})
-
-	// Insert Test Datas
-	err = c.Insert(&Timer{Thrd: "1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
-	if err != nil {
-		log.Fatal(err)
-	}
-	session.Close()
 }
 
 func aggregateHandler(w http.ResponseWriter, r *http.Request) {
@@ -228,7 +204,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// init Mongo connect
+	// init MongoDB connect
 	db, err := mgo.Dial(dbHosts)
 	if err != nil {
 		log.Fatal(err)
@@ -237,7 +213,21 @@ func main() {
 
 	// Optional. Switch the session to a monotonic behavior.
 	db.SetMode(mgo.Monotonic, true)
+
+	err = db.DB(dbName).DropDatabase()
+	if err != nil {
+		log.Fatal(err)
+	}
 	dbc := db.DB(dbName).C(dbCollection)
+
+	// creating capped collection
+	dbc.Create(&mgo.CollectionInfo{Capped: true, MaxBytes: cappedCollectionMaxByte, MaxDocs: cappedCollectionMaxDocs})
+
+	// Insert Test Datas
+	err = dbc.Insert(&Timer{Thrd: "1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// is Buffer enough?!?!
 	var buffer [500]byte
