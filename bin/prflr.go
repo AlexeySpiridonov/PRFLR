@@ -180,9 +180,6 @@ func prepareMessage(msg string) (timer Timer) {
 
 func main() {
 
-	// drop old DB, create new capped collection
-	initDB()
-
 	/* Starting Web Server */
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 	http.Handle("/favicon.ico", http.FileServer(http.Dir("./assets"))) //cool code for favicon! :)  it's very important!
