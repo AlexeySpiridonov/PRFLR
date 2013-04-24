@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief PRFLR log router
+ * @brief PRFLR log router for Yii Framework
  * @note following options should be enabled in config
  *     Yii::getLogger()->autoFlush = 1;
  *     Yii::getLogger()->autoDump = 1;
