@@ -23,10 +23,12 @@ class PRFLR {
 
     private static $sender;
 
-    public static function init($ip, $port, $source) {
+    public static function init($ip, $port, $source, $apikey) {
         self::$sender = new PRFLRSender();
         self::$sender->ip = gethostbyname($ip);
         self::$sender->port = $port;
+        self::$sender->apikey = $apikey;
+
         if (!self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))
             throw new Exception('Can\'t open socket.');
         if (!$source)
@@ -59,6 +61,7 @@ class PRFLRSender {
     public $thread;
     public $ip;
     public $port;
+    public $apikey;
 
     public function __construct() {
         
@@ -88,11 +91,13 @@ class PRFLRSender {
 
         // format the message
         $message = join(array(
-            substr($this->thread, 0, 16),
-            substr($this->source, 0, 16),
+            substr($this->thread, 0, 32),
+            substr($this->source, 0, 32),
             substr($timer, 0, 48),
             $time,
-            substr($info, 0, 16)
+            substr($info, 0, 32),
+            substr($this->apikey, 0, 32),
+
                 ), '|');
 
         if ($this->socket) {
