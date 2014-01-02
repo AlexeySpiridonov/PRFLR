@@ -27,10 +27,13 @@ class PRFLR {
         self::$sender = new PRFLRSender();
         self::$sender->ip = gethostbyname($ip);
         self::$sender->port = $port;
-        self::$sender->apikey = $apikey;
+
+        if (!self::$sender->apikey = $apikey)
+            throw new Exception('Unknown apikey.');
 
         if (!self::$sender->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))
             throw new Exception('Can\'t open socket.');
+
         if (!$source)
             self::$sender->source = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : 'Unknown';
         else
