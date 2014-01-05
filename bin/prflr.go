@@ -24,7 +24,17 @@ type Timer struct {
 	Time   float32
 	Info   string
 	Apikey string
+}
 
+/**
+ * User struct
+ */
+type User struct {
+	Email   string
+	Password    string
+	Apikey  string
+	Token   float32
+	Info   string
 }
 
 /**
