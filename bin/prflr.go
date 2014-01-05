@@ -46,7 +46,8 @@ type Stat struct {
 var (
 	dbName                  = "prflr"
 	dbHosts                 = "127.0.0.1"
-	dbCollection            = "timers"
+	dbTimers                = "timers"
+	dbUsers                 = "users"
 	udpPort                 = ":4000"
 	httpPort                = ":8080"
 	cappedCollectionMaxByte = 100000000 // 100Mb
@@ -67,7 +68,7 @@ func lastHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	db.SetMode(mgo.Monotonic, true)
-	dbc := db.DB(dbName).C(dbCollection)
+	dbc := db.DB(dbName).C(dbTimers)
 
 	// Query All
 	var results []Timer
@@ -96,7 +97,7 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	db.SetMode(mgo.Monotonic, true)
-	dbc := db.DB(dbName).C(dbCollection)
+	dbc := db.DB(dbName).C(dbTimers)
 
 	// Query All
 	var results []Stat
@@ -218,13 +219,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dbc := db.DB(dbName).C(dbCollection)
+	dbc := db.DB(dbName).C(dbTimers)
 
 	// creating capped collection
 	dbc.Create(&mgo.CollectionInfo{Capped: true, MaxBytes: cappedCollectionMaxByte, MaxDocs: cappedCollectionMaxDocs})
 
 	// Insert Test Datas
-	err = dbc.Insert(&Timer{Thrd: "1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data"})
+	err = dbc.Insert(&Timer{Thrd: "1234567890", Timer: "prflr.check", Src: "test.src", Time: 1, Info: "test data", Apikey: "PRFLRApiKey"})
 	if err != nil {
 		log.Fatal(err)
 	}
