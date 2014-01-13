@@ -10,8 +10,6 @@
  */
 class PRFLRLogRoute extends CLogRoute {
 
-    public $host;
-    public $port = 4000;
     public $source;
     public $apikey;
 
@@ -21,7 +19,7 @@ class PRFLRLogRoute extends CLogRoute {
     public function init() {
         parent::init();
         include_once(__DIR__ . '/prflr.php');
-        PRFLR::init($this->host, $this->port, $this->source, $this->apikey);
+        PRFLR::init($this->source, $this->apikey);
     }
 
     /**
