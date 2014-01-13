@@ -5,7 +5,7 @@
  * 
  * // configure profiler
  * // set  profiler server:port  and  set source for timers 
- * PRFLR::init('localhost','4000','192.168.1.45-testApp');
+ * PRFLR::init(192.168.1.45-testApp', 'yourApiKey');
  * 
  * 
  * //start timer
@@ -23,10 +23,8 @@ class PRFLR {
 
     private static $sender;
 
-    public static function init($ip, $port, $source, $apikey) {
+    public static function init($source, $apikey) {
         self::$sender = new PRFLRSender();
-        self::$sender->ip = gethostbyname($ip);
-        self::$sender->port = $port;
 
         if (!self::$sender->apikey = $apikey)
             throw new Exception('Unknown apikey.');
@@ -63,11 +61,11 @@ class PRFLRSender {
     public $source;
     public $thread;
     public $ip;
-    public $port;
+    public $port = 4000;
     public $apikey;
 
     public function __construct() {
-        
+        $this->ip = gethostbyname("prflr.org");
     }
 
     public function __destruct() {
