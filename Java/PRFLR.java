@@ -7,23 +7,6 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/*
- *  HOW TO USE 
- * // send to prflr.org:4000
- * // configure profiler
- * // set source for timers and apiKey
- * PRFLP.init("192.168.1.45-testAppn", "apiKey");
- * // set overflow counter. If number of active timers > overflowCount then timers cleared.
- * PRFLP.overflowCount = 50;
- * //start timer
- * PRFLP.begin("mongoDB.save");	
- * //some code
- * Thread.sleep(1000);
- * //stop timer with some info
- * PRFLP.end("mongoDB.save", "mongoDB save complete.");
- * 
- */
-
 public class PRFLP {
 	public static String source = null;
 	public static String apiKey = null;
