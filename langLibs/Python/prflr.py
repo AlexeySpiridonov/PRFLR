@@ -3,13 +3,11 @@
 # Threadsafe api
 # usage example:
 
-# from Prflr import Prflr
+# from prflr import Prflr
 # p = Prflr('key', '192.168.1.45-testApp')
 # p.begin('mongoDB.save')
 # # do something usefull
 # p.end('mongoDB.save', 'results')
-
-# Run test: python prflr.py or python3 prflr.py
 
 import sys
 import time
@@ -63,35 +61,3 @@ class Prflr:
             self.socket.sendto(bytes(msg, 'utf-8'), self.addr)
         else:
             self.socket.sendto(msg, self.addr)
-
-
-def run_test():
-    from threading import Thread
-
-    def test_fun(p):
-        p.begin('mongoDB.save')
-        time.sleep(1)
-        p.end('mongoDB.save', 'info')
-
-    def run_test_server():
-        srv = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        srv.bind(('localhost', 4000))
-        print('server is running')
-        for i in range(1, 10):
-            print('received: {}'.format(srv.recv(2048)))
-
-    p = Thread(target=run_test_server)
-    p.start()
-    prflr = Prflr('key', '192.168.1.45-testApp', 'localhost')
-    threads = []
-    for i in range(10):
-        t = Thread(target=test_fun, args=[prflr])
-        t.start()
-        print('started: {}'.format(t.ident))
-        threads.append(t)
-
-    for t in threads:
-        t.join()
-
-if __name__ == '__main__':
-    run_test()
