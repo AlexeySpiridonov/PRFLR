@@ -18,8 +18,8 @@ import threading
 PY3 = sys.version_info[0] == 3
 
 class Prflr:
-    def __init__(self, api_key, source='', host='prflr.org', port=4000):
-        self.addr = (host, port)
+    def __init__(self, api_key, source=''):
+        self.addr = ('prflr.org', 4000)
         self.source = source if source else socket.gethostname()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.key = api_key
@@ -34,7 +34,6 @@ class Prflr:
             self.timers[thread_id][timer] = time.time()
 
     def end(self, timer, info=''):
-        now = time.time()
         thread_id = threading.current_thread().ident
         timers = self.timers.get(thread_id)
         if not timers:
@@ -42,21 +41,19 @@ class Prflr:
         prev_time = timers.get(timer)
         if not prev_time:
             return False
-        spent = round((now - prev_time) * 1000, 3)
-        self.send(timer, spent, info)
+        spent = round((time.time() - prev_time) * 1000, 3)
+        self.send(timer, spent, info, thread_id)
         with self.lock:
             timers.pop(timer)
         return True
 
-    def send(self, timer, time, info):
-        thread_id = threading.current_thread().ident
+    def send(self, timer, time, info, thread_id):
         msg = '|'.join([str(thread_id)[:32],
                         self.source[:32],
                         timer[:48],
                         str(time)[:16],
                         info[:32],
                         self.key[:32]])
-        # print(msg)
         if PY3:
             self.socket.sendto(bytes(msg, 'utf-8'), self.addr)
         else:
