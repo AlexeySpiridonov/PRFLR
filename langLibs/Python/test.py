@@ -23,7 +23,7 @@ def run_test():
 
     p = Thread(target=run_test_server)
     p.start()
-    prflr = Prflr('key', '192.168.1.45-testApp', 'localhost')
+    prflr = Prflr('key', '192.168.1.45-testApp')
     threads = []
     for i in range(10):
         t = Thread(target=test_fun, args=[prflr])
