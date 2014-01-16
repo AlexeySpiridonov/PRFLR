@@ -10,6 +10,6 @@ sub test(){
 	}
 	PRFLR::end("mainTest", "good");
 }
-PRFLR::init("PerlExample", "bas9312");
+PRFLR::init("PerlExample", "testAppKey");
 $PRFLR::overflowCount = 50;
 test();
