@@ -1,8 +1,6 @@
 var source = "unknown";
 var apiKey = "unknown";
 var overflowCount = 100;
-var port = 4000;
-var serverIP;
 var timers = {};
 
 
@@ -11,15 +9,6 @@ var dns = require("dns");
 var socket;
 
 exports.init = function(Source, ApiKey){
-	dns.resolve4('prflr.org', function (err, addresses) {
-	  if (err) {
-	  	err.message = "Host unknown.";
-	  	throw err;
-	  }
-	  serverIP = JSON.stringify(addresses[0]);
-	  console.log('address: ' + JSON.stringify(addresses[0]));
-  	});
-
 	socket = dgram.createSocket("udp4");
 	if(!ApiKey) {
 		throw "Unknown apikey.";
@@ -50,9 +39,7 @@ exports.end = function(timerName, info){
 	var diffTime = process.hrtime(timers.map[timerName]);
 	var thread = "" + process.pid;
 	delete timers.map[timerName];
-	console.log()
 	var trueDiffTime = ((diffTime[0] * 1e9 + diffTime[1]) / 1000000 * precision) / precision;
-	console.log("trueDiffTime:" + trueDiffTime);
 	send(timerName, "" + trueDiffTime, "" + thread, info);
 }
 
@@ -73,11 +60,9 @@ function send(timerName, time, thread, info){
 		+ info.substring(0, 32) + "|"
 		+ apikey.substring(0, 32);
 
-		console.log(dataForSend);
-
 		var message = new Buffer(dataForSend);
 		//should work with serverIP, but it doesn't
-		socket.send(message, 0, message.length, port, 'prflr.org', function(err, bytes){
+		socket.send(message, 0, message.length, 4000, 'prflr.org', function(err, bytes){
 			if(err) throw err;
 		});
 }
