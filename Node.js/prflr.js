@@ -11,13 +11,13 @@ exports.init = function(Source, ApiKey){
 	if(!ApiKey) {
 		throw "Unknown apikey.";
 	} else {
-		apikey = ApiKey;
+		apikey = ApiKey.substring(0, 32);
 	}
 
 	if(!Source){
 		throw "Unknown source."
 	} else {
-		source = Source;
+		source = Source.substring(0, 32);
 	}
 
 	timers.map = {};
@@ -48,11 +48,11 @@ exports.setOverflowCount = function(count){
 function send(timerName, time, thread, info){
 	var dataForSend = 
 		thread.substring(0, 32) + "|"	
-		+ source.substring(0, 32) + "|" 
+		+ source + "|" 
 		+ timerName.substring(0, 48) + "|"
 		+ time + "|"
 		+ info.substring(0, 32) + "|"
-		+ apikey.substring(0, 32);
+		+ apikey;
 
 		var message = new Buffer(dataForSend);
 		//should work with serverIP, but it doesn't
