@@ -3,9 +3,7 @@ var apiKey = "unknown";
 var overflowCount = 100;
 var timers = {};
 
-
 var dgram = require("dgram");
-var dns = require("dns");
 var socket;
 
 exports.init = function(Source, ApiKey){
@@ -45,10 +43,6 @@ exports.end = function(timerName, info){
 
 exports.setOverflowCount = function(count){
 	overflowCount = count;
-}
-
-function cleanTimers(){
-	delete timers.map;
 }
 
 function send(timerName, time, thread, info){
